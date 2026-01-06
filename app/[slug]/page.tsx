@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { notFound } from 'next/navigation';
 import { materials, services } from '@/data/content';
 import MaterialTemplate from '../../components/MaterialTemplate';

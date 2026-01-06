@@ -9,7 +9,11 @@ export const metadata: Metadata = {
   description: "3D Labs Sri Lanka — Expert 3D Printing, CAD Design, and Prototyping Services. We offer FDM, SLA, and Resin Printing for industrial, medical, and creative projects.",
   keywords: "3D printing, 3D printing Sri Lanka, 3D design, 3D modeling, prototyping, FDM, SLA, resin printing, Technotronic Futuristics, 3D Labs",
   authors: [{ name: "Technotronic Futuristics" }],
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

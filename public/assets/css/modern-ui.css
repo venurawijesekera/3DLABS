@@ -1,0 +1,176 @@
+:root {
+    --primary-color: #ffa415;
+    --secondary-color: #121212;
+    --text-color: #e0e0e0;
+    --bg-dark: #0a0a0a;
+    --bg-card: rgba(30, 30, 30, 0.6);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(20, 20, 20, 0.4);
+    --backdrop-blur: blur(12px);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff8c00;
+}
+
+/* Modern Button Overrides */
+.cs_btn {
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary-color), #ff8c00);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(255, 164, 21, 0.3);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.cs_btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff8c00, var(--primary-color));
+    opacity: 0;
+    z-index: -1;
+    transition: var(--transition);
+}
+
+.cs_btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 164, 21, 0.5);
+    color: #fff;
+}
+
+.cs_btn:hover::before {
+    opacity: 1;
+}
+
+/* Glassmorphism Cards */
+.cs_card,
+.service-card,
+.cs_iconbox {
+    background: var(--glass-bg);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    border: var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: var(--transition);
+}
+
+.cs_card:hover,
+.service-card:hover,
+.cs_iconbox:hover {
+    transform: translateY(-5px);
+    background: rgba(40, 40, 40, 0.5);
+    border-color: rgba(255, 164, 21, 0.3);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Hero Section Enhancement */
+.cs_hero {
+    position: relative;
+}
+
+.cs_hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(to top, var(--bg-dark), transparent);
+    pointer-events: none;
+}
+
+/* Form Elements */
+input,
+textarea,
+select {
+    background: var(--bg-card) !important;
+    border: var(--glass-border) !important;
+    color: var(--text-color) !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    transition: var(--transition) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(255, 164, 21, 0.2) !important;
+    outline: none;
+}
+
+/* Typography Enhancements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #fff;
+    letter-spacing: -0.02em;
+}
+
+.cs_section_title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.cs_section_subtitle {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Footer Modernization */
+footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: #050505;
+}
+
+/* Link Hover */
+a {
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--primary-color);
+}

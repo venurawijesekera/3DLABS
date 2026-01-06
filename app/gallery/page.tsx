@@ -1,0 +1,97 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+
+interface GalleryItem {
+    id: number;
+    title: string;
+    category: 'FDM' | 'SLA';
+    image: string;
+}
+
+const galleryItems: GalleryItem[] = [
+    { id: 1, title: 'Carbon Fiber Nylon with PLA infill', category: 'FDM', image: '/assets/img/gallery/1.png' },
+    { id: 2, title: 'Replacement Part For ZEISS Humphry Field Analyzer', category: 'SLA', image: '/assets/img/gallery/2.png' },
+    { id: 3, title: 'Electronics Enclosure Printed With ASA', category: 'FDM', image: '/assets/img/gallery/3.png' },
+    { id: 4, title: 'Electronics Enclosure Printed With ASA', category: 'FDM', image: '/assets/img/gallery/4.png' },
+    { id: 5, title: 'Industrial Cooling Fan For CEYPETCO Using PA6 CF', category: 'FDM', image: '/assets/img/gallery/5.png' },
+    { id: 6, title: 'Multi Material Print ABS-CF/PLA/TPU Caster Wheel', category: 'FDM', image: '/assets/img/gallery/6.png' },
+    { id: 7, title: 'Centrifuge Rotor Printed Using PETG CF', category: 'FDM', image: '/assets/img/gallery/7.png' },
+    { id: 8, title: 'Clear Resin Printed Mount', category: 'SLA', image: '/assets/img/gallery/8.png' },
+    { id: 9, title: 'Hight Temp. Resin - Espresso Coffee Maker Presure Guage', category: 'SLA', image: '/assets/img/gallery/9.png' },
+    { id: 10, title: 'Airless Tire', category: 'FDM', image: '/assets/img/gallery/10.png' },
+    { id: 11, title: 'Airless Tire with ABS Rim', category: 'FDM', image: '/assets/img/gallery/11.png' },
+    { id: 12, title: 'Medical Device Enclosure Replacement', category: 'SLA', image: '/assets/img/gallery/12.png' },
+    { id: 13, title: 'Clear Specs Frame', category: 'SLA', image: '/assets/img/gallery/13.png' },
+    { id: 14, title: 'Custom Specs Frame', category: 'SLA', image: '/assets/img/gallery/14.png' },
+    { id: 15, title: 'Multi Material Gear Wheel PETG-CF with PLA infill', category: 'FDM', image: '/assets/img/gallery/15.png' },
+    { id: 16, title: 'Blower Impeller', category: 'SLA', image: '/assets/img/gallery/16.png' },
+    { id: 17, title: 'Mini Gear Wheel', category: 'SLA', image: '/assets/img/gallery/17.png' },
+    { id: 18, title: 'Cosplay Helmet printed with PLA', category: 'FDM', image: '/assets/img/gallery/18.png' },
+];
+
+export default function Gallery() {
+    // Note: Original site used Isotope. Here we use simple React filtering.
+    // Although not explicitly requested in the HTML viewed, usually gallery pages have filters.
+    // The viewed HTML shows div "cs_isotop cs_style_1" and items have no visible filter buttons in the code snippet 
+    // but looking closely at the screenshot or expected behavior of 'isotop' usually implies filtering capability.
+    // However, the provided HTML DOES NOT have filter buttons above the grid. 
+    // It just lists everything. I will stick to what is in the HTML: A grid of items.
+    // If filter buttons were needed they would be in the UL list.
+
+    return (
+        <>
+            <div className="cs_height_30 cs_height_lg_30"></div>
+            <div className="cs_height_50 cs_height_lg_30"></div>
+            <div className="cs_section_heading cs_style_1 cs_type_3 text-center">
+                <div className="container">
+                    <p className="cs_section_subtitle cs_accent_color cs_fs_21 mb-0 wow fadeInLeft" data-wow-duration="0.8s" data-wow-delay="0.2s">Work Gallery</p>
+                    <div className="cs_height_20 cs_height_lg_10"></div>
+                    <h2 className="cs_section_title cs_fs_68 mb-0">We have completed a series of noteworthy 3D prints</h2>
+                </div>
+                <div className="cs_shape_3"></div>
+            </div>
+            <div className="cs_height_75 cs_height_lg_60"></div>
+
+            <div className="container">
+                <div className="row cs_gap_y_24">
+                    {galleryItems.map((item) => (
+                        <div key={item.id} className="col-lg-4 col-sm-6">
+                            <div className="cs_portfolio cs_style_1">
+                                <Link href="#" className="cs_portfolio_thumb cs_radius_5">
+                                    <img src={item.image} alt="Portfolio" className="w-100" />
+                                </Link>
+                                <div className="cs_portfolio_info">
+                                    <h2 className="cs_portfolio_title cs_fs_38"><Link href="#">{item.title}</Link></h2>
+                                    <Link href="#" className="cs_portfolio_btn">{item.category}</Link>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="container">
+                <div className="cs_cta cs_style_3 text-center">
+                    <div className="cs_height_140 cs_height_lg_70"></div>
+                    <h2 className="cs_cta_title cs_fs_50 mb-0">
+                        <span className="position-relative d-inline-block">
+                            Is there a specific project or goal <br />that you have in mind?
+                            <svg className="position-absolute" style={{ right: '-30px', bottom: '10px' }} width="84" height="77" viewBox="0 0 84 77" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g opacity="0.5">
+                                    <path d="M64.8361 15.0076C60.9794 17.1059 57.7008 20.1708 53.9802 22.4974C50.3325 24.7754 46.9324 27.5246 43.6247 30.2349C36.9169 35.7187 30.7919 42.1594 26.6584 49.8046C26.1096 50.8198 27.4502 51.9223 28.2856 51.0578C34.192 44.9037 40.2586 38.9147 46.4273 33.0375C49.429 30.1685 52.4729 27.3368 55.5588 24.5423C58.8228 21.594 62.5677 19.1994 65.7881 16.2413C66.4584 15.6196 65.5986 14.5899 64.8361 15.0076Z" fill="#4F4747" />
+                                    <path d="M82.3815 43.7793C77.9911 43.7567 73.6406 44.8596 69.2592 45.1026C64.965 45.3382 60.6605 46.106 56.4556 46.8843C47.9344 48.4516 39.4622 51.1384 32.1532 55.8409C31.1827 56.4653 31.8251 58.0779 32.974 57.7236C41.1165 55.1825 49.3197 52.8633 57.5584 50.6913C61.5718 49.6264 65.6042 48.6144 69.6554 47.6554C73.9369 46.6475 78.3724 46.3567 82.6202 45.3192C83.5073 45.098 83.251 43.7813 82.3815 43.7793Z" fill="#4F4747" />
+                                    <path d="M32.2965 0.725762C30.183 4.57405 29.0778 8.92393 27.202 12.891C25.3612 16.7778 23.9834 20.9274 22.6622 24.9946C19.9763 33.2318 18.2976 41.9599 18.9456 50.6268C19.0316 51.7776 20.7553 51.982 20.9918 50.8032C22.6412 42.4344 24.5147 34.1181 26.5343 25.8407C27.5122 21.8052 28.5457 17.7783 29.6347 13.76C30.7905 9.51616 32.6501 5.47878 33.7639 1.25032C33.9925 0.365116 32.7129 -0.0375403 32.2965 0.725762Z" fill="#4F4747" />
+                                </g>
+                            </svg>
+                        </span>
+                    </h2>
+                    <div className="cs_height_44 cs_height_lg_30"></div>
+                    <Link href="/contact" className="cs_btn cs_style_1">Send Message <span><i className="fa-solid fa-arrow-right"></i></span></Link>
+                    <div className="cs_height_150 cs_height_lg_80"></div>
+                </div>
+            </div>
+        </>
+    );
+}

@@ -1,0 +1,12 @@
+name = "3dlabs-next"
+main = ".vercel/output/static/_worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = ".vercel/output/static"
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "3dlabs-db"
+# database_id = "YOUR_DATABASE_ID_HERE"

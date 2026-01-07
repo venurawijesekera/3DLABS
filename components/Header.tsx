@@ -7,8 +7,6 @@ export default function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<{ name: string } | null>(null);
 
-  if (pathname === '/login') return null;
-
   useEffect(() => {
     // Auth logic
     const clientStr = localStorage.getItem('3dlabs_client');
@@ -19,6 +17,8 @@ export default function Header() {
       } catch (e) { console.error(e); }
     }
   }, []);
+
+  if (pathname === '/login') return null;
 
   const isActive = (path: string) => {
     if (path === '/' && pathname !== '/') return false;

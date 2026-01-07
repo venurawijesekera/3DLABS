@@ -35,6 +35,21 @@ export default function RootLayout({
         {/* 3D Viewer Custom CSS can be moved to a CSS module or globals, but for now specific to home page? It was in index.html, so I'll leave it out of global layout unless needed. */}
       </head>
       <body className="cs_dark">
+        {/* React-managed Preloader Hider */}
+        <Script id="hide-preloader" strategy="afterInteractive">
+          {`
+            (function() {
+              const preloader = document.querySelector('.cs_perloader');
+              if (preloader) {
+                setTimeout(() => {
+                  preloader.style.opacity = '0';
+                  setTimeout(() => preloader.style.display = 'none', 500);
+                }, 1000);
+              }
+            })();
+          `}
+        </Script>
+
         <div className="cursor" id="client_cursor">View</div>
 
         {/* Preloader - ideally converted to React, but for now keeping structure if JS handles it */}

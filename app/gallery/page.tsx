@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { FC } from 'react';
 import Link from 'next/link';
 
 interface GalleryItem {

@@ -5,12 +5,13 @@ export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
     const { env } = getRequestContext();
+    const db = (env as any).DB;
     const data = await request.json();
 
-    let clientId = null;
+    let clientId: any = null;
 
     if (data.token) {
-        const client = await (env as any).DB.prepare("SELECT id FROM clients WHERE token = ?").bind(data.token).first();
+        const client: any = await db.prepare("SELECT id FROM clients WHERE token = ?").bind(data.token).first();
         if (!client) {
             return NextResponse.json({ success: false, message: "Invalid token" }, { status: 401 });
         }
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-        await (env as any).DB.prepare(
+        await db.prepare(
             "INSERT INTO quotes (client_id, guest_name, guest_contact, material, infill, supports, print_time, weight, cost, amount_paid, file_details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)"
         ).bind(clientId, data.guest_name || null, data.guest_contact || null, data.material, data.infill, data.supports, data.time, data.weight, data.cost, JSON.stringify(data.file_details)).run();
 

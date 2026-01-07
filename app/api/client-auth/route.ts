@@ -11,6 +11,7 @@ async function hashPassword(text: string) {
 
 export async function POST(request: NextRequest) {
     const { env } = getRequestContext();
+    const db = (env as any).DB;
     const data = await request.json();
 
     // 1. SIGN UP
@@ -18,9 +19,9 @@ export async function POST(request: NextRequest) {
         const { name, email, password, phone } = data;
         const hashed = await hashPassword(password);
         try {
-            await (env as any).DB.prepare("INSERT INTO clients (name, email, password, phone) VALUES (?, ?, ?, ?)").bind(name, email, hashed, phone).run();
+            await db.prepare("INSERT INTO clients (name, email, password, phone) VALUES (?, ?, ?, ?)").bind(name, email, hashed, phone).run();
             return NextResponse.json({ success: true, message: "Account created!" });
-        } catch (e) {
+        } catch {
             return NextResponse.json({ success: false, message: "Email exists." }, { status: 400 });
         }
     }
@@ -28,11 +29,11 @@ export async function POST(request: NextRequest) {
     // 2. LOGIN
     if (data.action === 'login') {
         const hashed = await hashPassword(data.password);
-        const client = await (env as any).DB.prepare("SELECT * FROM clients WHERE email = ? AND password = ?").bind(data.email, hashed).first();
+        const client: any = await db.prepare("SELECT * FROM clients WHERE email = ? AND password = ?").bind(data.email, hashed).first();
         if (!client) return NextResponse.json({ success: false, message: "Invalid credentials" }, { status: 401 });
 
         const token = crypto.randomUUID();
-        await (env as any).DB.prepare("UPDATE clients SET token = ? WHERE id = ?").bind(token, client.id).run();
+        await db.prepare("UPDATE clients SET token = ? WHERE id = ?").bind(token, client.id).run();
 
         // Return profile data immediately
         return NextResponse.json({
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
 
     // 3. GET PROFILE
     if (data.action === 'get_profile') {
-        const client = await (env as any).DB.prepare("SELECT name, email, phone, address FROM clients WHERE token = ?").bind(data.token).first();
+        const client: any = await db.prepare("SELECT name, email, phone, address FROM clients WHERE token = ?").bind(data.token).first();
         if (client) return NextResponse.json({ success: true, client });
         return NextResponse.json({ success: false }, { status: 401 });
     }
@@ -51,10 +52,10 @@ export async function POST(request: NextRequest) {
     // 4. UPDATE PROFILE
     if (data.action === 'update_profile') {
         // Verify token first
-        const client = await (env as any).DB.prepare("SELECT id FROM clients WHERE token = ?").bind(data.token).first();
+        const client: any = await db.prepare("SELECT id FROM clients WHERE token = ?").bind(data.token).first();
         if (!client) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
 
-        await (env as any).DB.prepare("UPDATE clients SET name = ?, phone = ?, address = ? WHERE id = ?")
+        await db.prepare("UPDATE clients SET name = ?, phone = ?, address = ? WHERE id = ?")
             .bind(data.name, data.phone, data.address, client.id).run();
 
         return NextResponse.json({ success: true, message: "Profile Updated" });

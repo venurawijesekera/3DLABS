@@ -45,7 +45,6 @@ export default function HeroViewer() {
         let currentMesh: THREE.Mesh | null = null;
         let currentModelIndex = 0;
         let animationId: number;
-        let intervalId: NodeJS.Timeout;
 
         const loadModel = (index: number) => {
             setLoading(true);
@@ -100,7 +99,7 @@ export default function HeroViewer() {
         loadModel(0);
         animate();
 
-        intervalId = setInterval(() => {
+        const intervalId = setInterval(() => {
             currentModelIndex = (currentModelIndex + 1) % modelsList.length;
             loadModel(currentModelIndex);
         }, 5000);

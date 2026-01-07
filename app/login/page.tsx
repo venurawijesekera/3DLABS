@@ -11,7 +11,7 @@ export default function Login() {
     const [signupData, setSignupData] = useState({ name: '', phone: '', email: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
+    useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();

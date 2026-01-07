@@ -67,7 +67,7 @@ export default function STLViewer({ file, color }: STLViewerProps) {
                 geometry.scale(scaleFactor, scaleFactor, scaleFactor);
 
                 // Map 'White' -> hex, etc. simple mapping
-                let hexColor = 0x444444;
+                const hexColor = 0x444444;
 
                 const material = new THREE.MeshPhongMaterial({ color: hexColor, specular: 0x111111, shininess: 50 });
                 const mesh = new THREE.Mesh(geometry, material);

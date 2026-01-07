@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Script from 'next/script';
 import HeroViewer from '@/components/HeroViewer';
 
 export default function Home() {
@@ -59,7 +58,7 @@ export default function Home() {
                 <h1 className="cs_hero_title cs_fs_68 text-uppercase wow fadeInRight" data-wow-duration="0.8s" data-wow-delay="0.2s">
                   WELCOME TO <br /> 3D LABS <br /> Additive Solutions
                 </h1>
-                <p className="cs_section_subtitle cs_accent_color cs_fs_18 mb-0 wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">Sri Lanka's No.1 3D Printing Service. <br /> with Industrial Additive Manufacturing Solutions.</p>
+                <p className="cs_section_subtitle cs_accent_color cs_fs_18 mb-0 wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">Sri Lanka&apos;s No.1 3D Printing Service. <br /> with Industrial Additive Manufacturing Solutions.</p>
                 <br /><br />
                 <div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>

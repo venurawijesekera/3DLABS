@@ -28,7 +28,7 @@ export default function Service() {
                     <div className="row cs_gap_y_35">
                         <div className="col-lg-4 col-sm-6">
                             <div className="cs_team cs_style_1">
-                                <Link href="/fdm" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/fdm.png" alt="Team" /></Link>
+                                <Link href="/fdm" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/fdm.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/fdm">FDM 3D Printing</Link></h2>
                                     <p className="mb-0">More Details</p>
@@ -37,7 +37,7 @@ export default function Service() {
                         </div>
                         <div className="col-lg-4 col-sm-6">
                             <div className="cs_team cs_style_1">
-                                <Link href="/sla" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/SLA.png" alt="Team" /></Link>
+                                <Link href="/sla" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/SLA.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/sla">SLA 3D Printing</Link></h2>
                                     <p className="mb-0">More Details</p>
@@ -46,7 +46,7 @@ export default function Service() {
                         </div>
                         <div className="col-lg-4 col-sm-6">
                             <div className="cs_team cs_style_1">
-                                <Link href="/sls" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/sls.png" alt="Team" /></Link>
+                                <Link href="/sls" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/sls.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/sls">SLS 3D Printing</Link></h2>
                                     <p className="mb-0">More Details</p>
@@ -55,7 +55,7 @@ export default function Service() {
                         </div>
                         <div className="col-lg-4 col-sm-6">
                             <div className="cs_team cs_style_1">
-                                <Link href="/dmls" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/dmls.png" alt="Team" /></Link>
+                                <Link href="/dmls" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/dmls.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/dmls">DMLS 3D Printing</Link></h2>
                                     <p className="mb-0">More Details</p>
@@ -64,7 +64,7 @@ export default function Service() {
                         </div>
                         <div className="col-lg-4 col-sm-6">
                             <div className="cs_team cs_style_1">
-                                <Link href="/laser" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/laser.png" alt="Team" /></Link>
+                                <Link href="/laser" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/laser.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/laser">Fiber Laser Cutting</Link></h2>
                                     <p className="mb-0">More Details</p>
@@ -73,7 +73,7 @@ export default function Service() {
                         </div>
                         <div className="col-lg-4 col-sm-6">
                             <div className="cs_team cs_style_1">
-                                <Link href="/carbon" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/cf.png" alt="Team" /></Link>
+                                <Link href="/carbon" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img className="w-100" src="/assets/img/services/cf.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/carbon">Carbon Fiber Composite Fabrication</Link></h2>
                                     <p className="mb-0">More Details</p>
@@ -119,7 +119,7 @@ export default function Service() {
 
                                 <div className="col-lg-6">
                                     <div className="cs_about_thumb">
-                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/cad-design.png')" }}></div>
+                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/cad-design.webp')" }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +149,7 @@ export default function Service() {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="cs_about_thumb">
-                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/others/case_3.jpeg')" }}></div>
+                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/others/case_3.webp')" }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@ export default function Service() {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="cs_about_thumb">
-                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/material.png')" }}></div>
+                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/material.webp')" }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +209,7 @@ export default function Service() {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="cs_about_thumb">
-                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/decal.png')" }}></div>
+                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/decal.webp')" }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -239,7 +239,7 @@ export default function Service() {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="cs_about_thumb">
-                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/post-processing.png')" }}></div>
+                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/post-processing.webp')" }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +269,7 @@ export default function Service() {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="cs_about_thumb">
-                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/batch-production.png')" }}></div>
+                                        <div className="cs_about_thumb_in cs_bg_filed w-100" style={{ backgroundImage: "url('/assets/img/services/batch-production.webp')" }}></div>
                                     </div>
                                 </div>
                             </div>

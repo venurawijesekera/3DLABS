@@ -34,7 +34,7 @@ export default function Header() {
           <div className="cs_main_header_in">
             <div className="cs_main_header_left">
               <Link className="cs_site_branding" href="/">
-                <img src="/assets/img/3logo.png" alt="Logo" />
+                <img src="/assets/img/3logo.webp" alt="Logo" />
               </Link>
             </div>
             <div className="cs_main_header_center">

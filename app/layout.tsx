@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="no-js">
       <head>
-        <link rel="icon" href="/assets/img/favicon.png" />
+        <link rel="icon" href="/assets/img/favicon.webp" />
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/assets/css/fontawesome.min.css" />
         <link rel="stylesheet" href="/assets/css/animate.css" />

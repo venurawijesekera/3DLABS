@@ -2,7 +2,7 @@ export const materials: Record<string, any> = {
     pla: {
         title: 'PLA',
         subtitle: 'Polylactic Acid',
-        image: '/assets/img/material/colors.png',
+        image: '/assets/img/material/colors.webp',
         description: 'PLA is a biodegradable thermoplastic derived from renewable resources such as corn starch or sugarcane. It’s known for its ease of printing, low warping, and excellent surface finish making it ideal for prototypes, display models, and general purpose parts that don’t require high heat resistance.',
         progress: [
             { label: 'Strength', value: 55 },
@@ -32,13 +32,13 @@ export const materials: Record<string, any> = {
                 'Product design mock ups',
                 'Low stress jigs and fixtures'
             ],
-            image: '/assets/img/material/pzero.png'
+            image: '/assets/img/material/pzero.webp'
         },
         sliders: [
-            { img: '/assets/img/sliders/robo.png', title: 'Cosplay Helmet', subtitle: 'Cost Effective - Clean Print Surface' },
-            { img: '/assets/img/3d-labs/gearwheel424x450.png', title: 'Gear Wheel', subtitle: 'Light Weight/ Strong & Durable/ Cost Effective' },
-            { img: '/assets/img/3d-labs/specsframe424x450.png', title: 'Specs Frame', subtitle: 'Customizable/ Strong & Durable' },
-            { img: '/assets/img/3d-labs/tire424x450.png', title: 'Airless Tire', subtitle: 'Flexible/ Durable' },
+            { img: '/assets/img/sliders/robo.webp', title: 'Cosplay Helmet', subtitle: 'Cost Effective - Clean Print Surface' },
+            { img: '/assets/img/3d-labs/gearwheel424x450.webp', title: 'Gear Wheel', subtitle: 'Light Weight/ Strong & Durable/ Cost Effective' },
+            { img: '/assets/img/3d-labs/specsframe424x450.webp', title: 'Specs Frame', subtitle: 'Customizable/ Strong & Durable' },
+            { img: '/assets/img/3d-labs/tire424x450.webp', title: 'Airless Tire', subtitle: 'Flexible/ Durable' },
         ]
     },
     // Add other materials here (abs, petg, etc.) copying the structure
@@ -55,7 +55,7 @@ export const services: Record<string, any> = {
             { number: '03', title: 'Durable Functional Parts', text: 'Produces strong, mechanically stable components suitable for real-world testing and use.' },
             { number: '04', title: 'Fast Turnaround', text: 'Quick setup and print times make it perfect for rapid prototyping and iterative design development.' }
         ],
-        infoImage: '/assets/img/plastics/centrifuge.png',
+        infoImage: '/assets/img/plastics/centrifuge.webp',
         applications: {
             text: 'FDM 3D printing is widely used across industries for creating durable, precise, and cost-effective solutions, enabling faster product development, design validation, and customised manufacturing.',
             list: [
@@ -66,11 +66,11 @@ export const services: Record<string, any> = {
                 'End-use components',
                 'Jigs, fixtures, and tooling holders'
             ],
-            image: '/assets/img/3d-labs/bend948x600.png'
+            image: '/assets/img/3d-labs/bend948x600.webp'
         },
         capabilities: {
             text: 'Our FDM 3D printing service combines precision, reliability, and versatility to handle complex designs with ease. We prioritise accuracy and repeatability to ensure every print meets high-quality standards. Advanced features allow us to optimise prints for strength, durability, and material efficiency. Additionally, we provide professional finishing options to deliver polished, ready-to-use parts.',
-            image: '/assets/img/plastics/bin.png',
+            image: '/assets/img/plastics/bin.webp',
             list: [
                 { label: 'Maximum build volume', value: '1000mm x 1000mm x 1300mm' },
                 { label: 'Layer resolution range', value: '0.1mm - 0.8mm' },
@@ -88,7 +88,7 @@ export const services: Record<string, any> = {
                 'Quick turnaround times.',
                 'Local support and consultation.'
             ],
-            image: '/assets/img/3d-labs/engineering2.png',
+            image: '/assets/img/3d-labs/engineering2.webp',
             btnText: 'FDM Materials',
             btnLink: '/material'
         }

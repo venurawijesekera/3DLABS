@@ -9,14 +9,14 @@ export default function Footer() {
     if (pathname === '/login') return null;
 
     return (
-        <footer className="cs_fooer cs_bg_filed" style={{ backgroundImage: "url('/assets/img/footer.png')" }}>
+        <footer className="cs_fooer cs_bg_filed" style={{ backgroundImage: "url('/assets/img/footer.webp')" }}>
             <div className="cs_fooer_main">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-3 col-sm-6">
                             <div className="cs_footer_item">
                                 <div className="cs_text_widget">
-                                    <img src="/assets/img/3logo.png" alt="Logo" style={{ width: '150px', height: 'auto', marginBottom: '20px' }} />
+                                    <img src="/assets/img/3logo.webp" alt="Logo" style={{ width: '150px', height: 'auto', marginBottom: '20px' }} />
                                 </div>
                                 <ul className="cs_menu_widget cs_mp0">
                                     <li>Kandy & Colombo, Sri Lanka<br />Island Wide Delivery Available.</li>

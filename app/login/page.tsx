@@ -82,7 +82,7 @@ export default function Login() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundImage: "url('/assets/img/bg.png')",
+            backgroundImage: "url('/assets/img/bg.webp')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             padding: '20px'
@@ -98,7 +98,7 @@ export default function Login() {
                 alignItems: 'center',
                 zIndex: 10
             }}>
-                <Link href="/"><img src="/assets/img/3logo.png" alt="Logo" style={{ height: '40px' }} /></Link>
+                <Link href="/"><img src="/assets/img/3logo.webp" alt="Logo" style={{ height: '40px' }} /></Link>
                 <Link href="/" className="cs_btn cs_style_1" style={{ color: '#fff', borderColor: '#fff' }}>Back Home</Link>
             </div>
 

@@ -25,7 +25,7 @@ export default function About() {
                 <div className="container">
                     <div className="row align-items-center">
                         <div className="col-lg-6">
-                            <div className="cs_about_thumb cs_bg_filed" style={{ backgroundImage: "url('/assets/img/3d-labs/bend948x600.png')" }}></div>
+                            <div className="cs_about_thumb cs_bg_filed" style={{ backgroundImage: "url('/assets/img/3d-labs/bend948x600.webp')" }}></div>
                         </div>
                         <div className="col-lg-5 offset-lg-1">
                             <div className="cs_section_heading cs_style_1">
@@ -134,7 +134,7 @@ export default function About() {
                                         <circle cx="148" cy="3" r="2.5" fill="#121212" stroke="#121212" />
                                     </svg>
                                 </div>
-                                <div className="cs_about_thumb_in cs_bg_filed" style={{ backgroundImage: "url('/assets/img/3d-labs/powersocket.png')" }}></div>
+                                <div className="cs_about_thumb_in cs_bg_filed" style={{ backgroundImage: "url('/assets/img/3d-labs/powersocket.webp')" }}></div>
                             </div>
                         </div>
                     </div>
@@ -164,7 +164,7 @@ export default function About() {
                         <div className="cs_working_process">
                             <div className="cs_working_process_col">
                                 <div className="cs_iconbox cs_style_6 text-center cs_center">
-                                    <div className="cs_iconbox_bg cs_bg_filed" style={{ backgroundImage: "url('/assets/img/others/process_1.png')" }}></div>
+                                    <div className="cs_iconbox_bg cs_bg_filed" style={{ backgroundImage: "url('/assets/img/others/process_1.webp')" }}></div>
                                     <div className="cs_iconbox_in">
                                         <div className="cs_iconbox_icon"><img src="/assets/img/icons/search.svg" alt="Icon" /></div>
                                         <h2 className="cs_iconbox_title cs_white_color cs_fs_29">Research</h2>
@@ -174,7 +174,7 @@ export default function About() {
                             </div>
                             <div className="cs_working_process_col">
                                 <div className="cs_iconbox cs_style_6 text-center cs_center">
-                                    <div className="cs_iconbox_bg cs_bg_filed" style={{ backgroundImage: "url('/assets/img/others/process_2.png')" }}></div>
+                                    <div className="cs_iconbox_bg cs_bg_filed" style={{ backgroundImage: "url('/assets/img/others/process_2.webp')" }}></div>
                                     <div className="cs_iconbox_in">
                                         <div className="cs_iconbox_icon"><img src="/assets/img/icons/idea.svg" alt="Icon" /></div>
                                         <h2 className="cs_iconbox_title cs_white_color cs_fs_29">Discuss</h2>
@@ -184,7 +184,7 @@ export default function About() {
                             </div>
                             <div className="cs_working_process_col">
                                 <div className="cs_iconbox cs_style_6 text-center cs_center">
-                                    <div className="cs_iconbox_bg cs_bg_filed" style={{ backgroundImage: "url('/assets/img/others/process_3.png')" }}></div>
+                                    <div className="cs_iconbox_bg cs_bg_filed" style={{ backgroundImage: "url('/assets/img/others/process_3.webp')" }}></div>
                                     <div className="cs_iconbox_in">
                                         <div className="cs_iconbox_icon"><img src="/assets/img/icons/gear.svg" alt="Icon" /></div>
                                         <h2 className="cs_iconbox_title cs_white_color cs_fs_29">Implement</h2>
@@ -214,7 +214,7 @@ export default function About() {
                     <div className="swiper-wrapper">
                         <div className="swiper-slide">
                             <div className="cs_team cs_style_1">
-                                <Link href="/team-details" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/fan 4.png" alt="Team" /></Link>
+                                <Link href="/team-details" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/fan 4.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/team-details">Industrial Cooling Fan For CEYPETCO</Link></h2>
                                     <p className="mb-0">Strong Durable/ High Temp. Resistant</p>
@@ -223,7 +223,7 @@ export default function About() {
                         </div>
                         <div className="swiper-slide">
                             <div className="cs_team cs_style_1">
-                                <Link href="/team-details" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/DOC.png" alt="Team" /></Link>
+                                <Link href="/team-details" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/DOC.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/team-details">Espresso Coffee Maker Presure Guage for DOC</Link></h2>
                                     <p className="mb-0">High Accuracy/ High Temp. </p>
@@ -232,7 +232,7 @@ export default function About() {
                         </div>
                         <div className="swiper-slide">
                             <div className="cs_team cs_style_1">
-                                <Link href="/team-details" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/samarisinghe large part side by side.png" alt="Team" /></Link>
+                                <Link href="/team-details" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/samarisinghe large part side by side.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/team-details">Replacement Part For ZEISS Humphry Field Analyzer</Link></h2>
                                     <p className="mb-0">High Accuracy/ Strong & Durable</p>
@@ -241,7 +241,7 @@ export default function About() {
                         </div>
                         <div className="swiper-slide">
                             <div className="cs_team cs_style_1">
-                                <Link href="/team-details" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/centrifuge.png" alt="Team" /></Link>
+                                <Link href="/team-details" className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/centrifuge.webp" alt="Team" /></Link>
                                 <div className="cs_team_info">
                                     <h2 className="cs_fs_29"><Link href="/team-details">Centrifuge Rotor Replacement For Baurs Pharmaceuticals</Link></h2>
                                     <p className="mb-0">Strong & Durable</p>
@@ -268,10 +268,10 @@ export default function About() {
             <div className="cs_height_84 cs_height_lg_70"></div>
             <div className="container">
                 <div className="cs_brands cs_style_1 wow fadeInDown" data-wow-duration="0.8s" data-wow-delay="0.2s">
-                    <div className="cs_brand"><img src="/assets/img/prototyping.png" alt="Brand" style={{ width: '200px', height: 'auto' }} /></div>
-                    <div className="cs_brand"><img src="/assets/img/engineering.png" alt="Brand" style={{ width: '200px', height: 'auto' }} /></div>
-                    <div className="cs_brand"><img src="/assets/img/medical.png" alt="Brand" style={{ width: '200px', height: 'auto' }} /></div>
-                    <div className="cs_brand"><img src="/assets/img/industrial.png" alt="Brand" style={{ width: '200px', height: 'auto' }} /></div>
+                    <div className="cs_brand"><img src="/assets/img/prototyping.webp" alt="Brand" style={{ width: '200px', height: 'auto' }} /></div>
+                    <div className="cs_brand"><img src="/assets/img/engineering.webp" alt="Brand" style={{ width: '200px', height: 'auto' }} /></div>
+                    <div className="cs_brand"><img src="/assets/img/medical.webp" alt="Brand" style={{ width: '200px', height: 'auto' }} /></div>
+                    <div className="cs_brand"><img src="/assets/img/industrial.webp" alt="Brand" style={{ width: '200px', height: 'auto' }} /></div>
                 </div>
             </div>
             <div className="cs_height_135 cs_height_lg_80"></div>

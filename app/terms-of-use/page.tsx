@@ -23,7 +23,7 @@ export default function TermsOfUse() {
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-2">
-                            <img src="/assets/img/3logo.png" alt="Member" className="w-100" />
+                            <img src="/assets/img/3logo.webp" alt="Member" className="w-100" />
                         </div>
                         <div className="col-xl-9 offset-xl-1">
                             <div className="cs_height_00 cs_height_lg_30"></div>

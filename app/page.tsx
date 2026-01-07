@@ -49,7 +49,7 @@ export default function Home() {
       `}} />
 
       {/* Hero */}
-      <section className="cs_hero cs_style_3 cs_bg_filed cs_center" data-src="/assets/img/bg.png">
+      <section className="cs_hero cs_style_3 cs_bg_filed cs_center" data-src="/assets/img/bg.webp">
         <div className="container">
           <div className="row align-items-center">
 
@@ -132,7 +132,7 @@ export default function Home() {
               <div className="cs_image_box cs_style_1">
                 <div className="cs_image_box_number cs_primary_color cs_primary_font cs_fs_38 cs_semibold">01</div>
                 <Link href="/consumer" className="cs_image_box_img cs_radius_5 overflow-hidden">
-                  <img src="/assets/img/3d-labs/consumer.png" alt="Service" />
+                  <img src="/assets/img/3d-labs/consumer.webp" alt="Service" />
                 </Link>
                 <div className="cs_image_box_info position-relative">
                   <h2 className="cs_image_box_title cs_fs_29 cs_semibold"><Link href="/consumer">CONSUMER GOODS</Link></h2>
@@ -148,7 +148,7 @@ export default function Home() {
               <div className="cs_image_box cs_style_1">
                 <div className="cs_image_box_number cs_primary_color cs_primary_font cs_fs_38 cs_semibold">02</div>
                 <Link href="/medical-sector" className="cs_image_box_img cs_radius_5 overflow-hidden">
-                  <img src="/assets/img/3d-labs/modle-teeth-200.png" alt="Service" loading="lazy" decoding="async" />
+                  <img src="/assets/img/3d-labs/modle-teeth-200.webp" alt="Service" loading="lazy" decoding="async" />
                 </Link>
                 <div className="cs_image_box_info position-relative">
                   <h2 className="cs_image_box_title cs_fs_29 cs_semibold"><Link href="/medical-sector">MEDICAL & HEALTHCARE</Link></h2>
@@ -164,7 +164,7 @@ export default function Home() {
               <div className="cs_image_box cs_style_1">
                 <div className="cs_image_box_number cs_primary_color cs_primary_font cs_fs_38 cs_semibold">03</div>
                 <Link href="/industrial-sector" className="cs_image_box_img cs_radius_5 overflow-hidden">
-                  <img src="/assets/img/3d-labs/fan200x200.png" alt="Service" />
+                  <img src="/assets/img/3d-labs/fan200x200.webp" alt="Service" />
                 </Link>
                 <div className="cs_image_box_info position-relative">
                   <h2 className="cs_image_box_title cs_fs_29 cs_semibold"><Link href="/industrial-sector">INDUSTRIAL & ENGINEERING</Link></h2>
@@ -180,7 +180,7 @@ export default function Home() {
               <div className="cs_image_box cs_style_1">
                 <div className="cs_image_box_number cs_primary_color cs_primary_font cs_fs_38 cs_semibold">04</div>
                 <Link href="/automotive" className="cs_image_box_img cs_radius_5 overflow-hidden">
-                  <img src="/assets/img/3d-labs/brkt200x200.png" alt="Service" />
+                  <img src="/assets/img/3d-labs/brkt200x200.webp" alt="Service" />
                 </Link>
                 <div className="cs_image_box_info position-relative">
                   <h2 className="cs_image_box_title cs_fs_29 cs_semibold"><Link href="/automotive">AUTOMOTIVE & AEROSPACE</Link></h2>
@@ -196,7 +196,7 @@ export default function Home() {
               <div className="cs_image_box cs_style_1">
                 <div className="cs_image_box_number cs_primary_color cs_primary_font cs_fs_38 cs_semibold">05</div>
                 <Link href="/electronics" className="cs_image_box_img cs_radius_5 overflow-hidden">
-                  <img src="/assets/img/3d-labs/electronics.png" alt="Service" />
+                  <img src="/assets/img/3d-labs/electronics.webp" alt="Service" />
                 </Link>
                 <div className="cs_image_box_info position-relative">
                   <h2 className="cs_image_box_title cs_fs_29 cs_semibold"><Link href="/electronics">ELECTRICAL, ELECTRONICS & PLUMBING</Link></h2>
@@ -212,7 +212,7 @@ export default function Home() {
               <div className="cs_image_box cs_style_1">
                 <div className="cs_image_box_number cs_primary_color cs_primary_font cs_fs_38 cs_semibold">06</div>
                 <Link href="/education" className="cs_image_box_img cs_radius_5 overflow-hidden">
-                  <img src="/assets/img/3d-labs/lattice.png" alt="Service" />
+                  <img src="/assets/img/3d-labs/lattice.webp" alt="Service" />
                 </Link>
                 <div className="cs_image_box_info position-relative">
                   <h2 className="cs_image_box_title cs_fs_29 cs_semibold"><Link href="/education">EDUCATION</Link></h2>
@@ -228,7 +228,7 @@ export default function Home() {
               <div className="cs_image_box cs_style_1">
                 <div className="cs_image_box_number cs_primary_color cs_primary_font cs_fs_38 cs_semibold">07</div>
                 <Link href="/architecture" className="cs_image_box_img cs_radius_5 overflow-hidden">
-                  <img src="/assets/img/3d-labs/w15hantana.png" alt="Service" />
+                  <img src="/assets/img/3d-labs/w15hantana.webp" alt="Service" />
                 </Link>
                 <div className="cs_image_box_info position-relative">
                   <h2 className="cs_image_box_title cs_fs_29 cs_semibold"><Link href="/architecture">ARCHITECTURE MODELS</Link></h2>
@@ -260,7 +260,7 @@ export default function Home() {
             <div className="cs_isotop_item">
               <div className="cs_portfolio cs_style_1">
                 <Link href="/material" className="cs_portfolio_thumb cs_radius_5">
-                  <img src="/assets/img/3d-labs/fan-4.png" alt="Portfolio" loading="lazy" />
+                  <img src="/assets/img/3d-labs/fan-4.webp" alt="Portfolio" loading="lazy" />
                 </Link>
                 <div className="cs_portfolio_info">
                   <h2 className="cs_portfolio_title cs_fs_38"><Link href="/material">Plastics</Link></h2>
@@ -271,7 +271,7 @@ export default function Home() {
             <div className="cs_isotop_item">
               <div className="cs_portfolio cs_style_1">
                 <Link href="/material" className="cs_portfolio_thumb cs_radius_5">
-                  <img src="/assets/img/3d-labs/samarisinghe-side-by-side.png" alt="Portfolio" loading="lazy" />
+                  <img src="/assets/img/3d-labs/samarisinghe-side-by-side.webp" alt="Portfolio" loading="lazy" />
                 </Link>
                 <div className="cs_portfolio_info">
                   <h2 className="cs_portfolio_title cs_fs_38"><Link href="/material">Resins</Link></h2>
@@ -281,7 +281,7 @@ export default function Home() {
             </div>
             <div className="cs_isotop_item">
               <div className="cs_portfolio cs_style_1">
-                <Link href="/material" className="cs_portfolio_thumb cs_radius_5"><img src="/assets/img/3d-labs/metal.png" alt="Portfolio" /></Link>
+                <Link href="/material" className="cs_portfolio_thumb cs_radius_5"><img src="/assets/img/3d-labs/metal.webp" alt="Portfolio" /></Link>
                 <div className="cs_portfolio_info">
                   <h2 className="cs_portfolio_title cs_fs_38"><Link href="/material">Alloys</Link></h2>
                   <Link href="/material" className="cs_portfolio_btn">Visit Gallery</Link>
@@ -290,7 +290,7 @@ export default function Home() {
             </div>
             <div className="cs_isotop_item">
               <div className="cs_portfolio cs_style_1">
-                <Link href="/material" className="cs_portfolio_thumb cs_radius_5"><img src="/assets/img/3d-labs/bellow.png" alt="Portfolio" /></Link>
+                <Link href="/material" className="cs_portfolio_thumb cs_radius_5"><img src="/assets/img/3d-labs/bellow.webp" alt="Portfolio" /></Link>
                 <div className="cs_portfolio_info">
                   <h2 className="cs_portfolio_title cs_fs_38"><Link href="/material">Elastomers</Link></h2>
                   <Link href="/material" className="cs_portfolio_btn">Visit Gallery</Link>
@@ -321,17 +321,17 @@ export default function Home() {
           <div className="cs_brands cs_style_2">
             <div className="cs_brand">
               <div className="wow fadeInDown" data-wow-duration="0.8s" data-wow-delay="0.1s">
-                <img src="/assets/img/companies/ceypetco.png" alt="Partner" />
+                <img src="/assets/img/companies/ceypetco.webp" alt="Partner" />
               </div>
             </div>
             <div className="cs_brand">
-              <div className="wow fadeInDown" data-wow-duration="0.8s" data-wow-delay="0.1s"><img src="/assets/img/companies/veolia logo.png" alt="Partner" /></div>
+              <div className="wow fadeInDown" data-wow-duration="0.8s" data-wow-delay="0.1s"><img src="/assets/img/companies/veolia logo.webp" alt="Partner" /></div>
             </div>
             <div className="cs_brand">
-              <div className="wow fadeInDown" data-wow-duration="0.8s" data-wow-delay="0.1s"><img src="/assets/img/companies/baurs logo.png" alt="Partner" /></div>
+              <div className="wow fadeInDown" data-wow-duration="0.8s" data-wow-delay="0.1s"><img src="/assets/img/companies/baurs logo.webp" alt="Partner" /></div>
             </div>
             <div className="cs_brand">
-              <div className="wow fadeInDown" data-wow-duration="0.8s" data-wow-delay="0.1s"><img src="/assets/img/companies/hunter.jpg" alt="Partner" /></div>
+              <div className="wow fadeInDown" data-wow-duration="0.8s" data-wow-delay="0.1s"><img src="/assets/img/companies/hunter.webp" alt="Partner" /></div>
             </div>
           </div>
         </div>
@@ -352,7 +352,7 @@ export default function Home() {
           <div className="swiper-wrapper">
             <div className="swiper-slide">
               <div className="cs_team cs_style_1">
-                <div className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/mold424x450.png" alt="Mold" /></div>
+                <div className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/mold424x450.webp" alt="Mold" /></div>
                 <div className="cs_team_info">
                   <h2 className="cs_fs_29">Test Injection Mold</h2>
                   <p className="mb-0">Strong, Durable/ High Temp.</p>
@@ -361,7 +361,7 @@ export default function Home() {
             </div>
             <div className="swiper-slide">
               <div className="cs_team cs_style_1">
-                <div className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/gearwheel424x450.png" alt="Gear Wheel" /></div>
+                <div className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/gearwheel424x450.webp" alt="Gear Wheel" /></div>
                 <div className="cs_team_info">
                   <h2 className="cs_fs_29">Gear Wheel</h2>
                   <p className="mb-0">Light Weight/ Strong & Durable/ Cost Effective</p>
@@ -370,7 +370,7 @@ export default function Home() {
             </div>
             <div className="swiper-slide">
               <div className="cs_team cs_style_1">
-                <div className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/specsframe424x450.png" alt="Specs Frame" /></div>
+                <div className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/specsframe424x450.webp" alt="Specs Frame" /></div>
                 <div className="cs_team_info">
                   <h2 className="cs_fs_29">Specs Frame</h2>
                   <p className="mb-0">Customizable/ Strong & Durable</p>
@@ -379,7 +379,7 @@ export default function Home() {
             </div>
             <div className="swiper-slide">
               <div className="cs_team cs_style_1">
-                <div className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/tire424x450.png" alt="Airless Tire" /></div>
+                <div className="cs_team_img cs_radius_5 overflow-hidden d-block"><img src="/assets/img/3d-labs/tire424x450.webp" alt="Airless Tire" /></div>
                 <div className="cs_team_info">
                   <h2 className="cs_fs_29">Airless Tire</h2>
                   <p className="mb-0">Flexible/ Durable</p>
@@ -418,11 +418,11 @@ export default function Home() {
             <rect opacity="0.25" x="50.8485" y="44.314" width="59.8743" height="59.8743" transform="rotate(-30.5854 50.8485 44.314)" stroke="#DDDDDD" strokeWidth="10" />
           </svg>
         </div>
-        <div className="position-absolute cs_layered_img_1 cs_to_up"><img src="/assets/img/creative-agency/1.png" alt="Thumb" className="wow zoomIn" data-wow-duration="1.5s" data-wow-delay="0.1s" /></div>
-        <div className="position-absolute cs_layered_img_2 cs_to_up_2"><img src="/assets/img/creative-agency/2.png" alt="Thumb" className="wow zoomIn" data-wow-duration="1.6s" data-wow-delay="0.2s" /></div>
-        <div className="position-absolute cs_layered_img_3 cs_to_up_3"><img src="/assets/img/creative-agency/3.png" alt="Thumb" className="wow zoomIn" data-wow-duration="1.4s" data-wow-delay="0.1s" /></div>
-        <div className="position-absolute cs_layered_img_4 cs_to_up_3"><img src="/assets/img/creative-agency/4.png" alt="Thumb" className="wow zoomIn" data-wow-duration="1.8s" data-wow-delay="0.1s" /></div>
-        <div className="position-absolute cs_layered_img_5 cs_to_up"><img src="/assets/img/creative-agency/5.png" alt="Thumb" className="wow zoomIn" data-wow-duration="1.6s" data-wow-delay="0.2s" /></div>
+        <div className="position-absolute cs_layered_img_1 cs_to_up"><img src="/assets/img/creative-agency/1.webp" alt="Thumb" className="wow zoomIn" data-wow-duration="1.5s" data-wow-delay="0.1s" /></div>
+        <div className="position-absolute cs_layered_img_2 cs_to_up_2"><img src="/assets/img/creative-agency/2.webp" alt="Thumb" className="wow zoomIn" data-wow-duration="1.6s" data-wow-delay="0.2s" /></div>
+        <div className="position-absolute cs_layered_img_3 cs_to_up_3"><img src="/assets/img/creative-agency/3.webp" alt="Thumb" className="wow zoomIn" data-wow-duration="1.4s" data-wow-delay="0.1s" /></div>
+        <div className="position-absolute cs_layered_img_4 cs_to_up_3"><img src="/assets/img/creative-agency/4.webp" alt="Thumb" className="wow zoomIn" data-wow-duration="1.8s" data-wow-delay="0.1s" /></div>
+        <div className="position-absolute cs_layered_img_5 cs_to_up"><img src="/assets/img/creative-agency/5.webp" alt="Thumb" className="wow zoomIn" data-wow-duration="1.6s" data-wow-delay="0.2s" /></div>
         <div className="container">
           <div className="row">
             <div className="col-lg-8 offset-lg-2">
@@ -513,8 +513,8 @@ export default function Home() {
             <div className="col-lg-6">
               <div className="cs_post cs_style_1 cs_type_1 position-relative overflow-hidden cs_radius_5">
                 <Link href="/blog" className="cs_post_thumb cs_image_blur_effect">
-                  <img src="/assets/img/3d-labs/multimaterial1.png" alt="Thumb" />
-                  <img src="/assets/img/3d-labs/multimaterial2.png" alt="Thumb" />
+                  <img src="/assets/img/3d-labs/multimaterial1.webp" alt="Thumb" />
+                  <img src="/assets/img/3d-labs/multimaterial2.webp" alt="Thumb" />
                 </Link>
                 <div className="cs_post_overlay h-100 w-100 position-absolute start-0 bottom-0"></div>
                 <div className="cs_post_info position-absolute w-100 start-0 bottom-0 d-flex flex-column justify-content-end">
@@ -527,8 +527,8 @@ export default function Home() {
             <div className="col-lg-6">
               <div className="cs_post cs_style_2">
                 <Link href="/blog" className="cs_post_thumb cs_radius_5 overflow-hidden cs_image_blur_effect">
-                  <img src="/assets/img/3d-labs/skinsafe1.png" alt="Post" />
-                  <img src="/assets/img/3d-labs/skinsafe2.png" alt="Post" />
+                  <img src="/assets/img/3d-labs/skinsafe1.webp" alt="Post" />
+                  <img src="/assets/img/3d-labs/skinsafe2.webp" alt="Post" />
                 </Link>
                 <div className="cs_post_right">
                   <span className="cs_posted_by">SLA</span>
@@ -537,8 +537,8 @@ export default function Home() {
               </div>
               <div className="cs_post cs_style_2">
                 <Link href="/blog" className="cs_post_thumb cs_radius_5 overflow-hidden cs_image_blur_effect">
-                  <img src="/assets/img/3d-labs/hightempmold1.png" alt="Post" />
-                  <img src="/assets/img/3d-labs/hightempmold2.png" alt="Post" />
+                  <img src="/assets/img/3d-labs/hightempmold1.webp" alt="Post" />
+                  <img src="/assets/img/3d-labs/hightempmold2.webp" alt="Post" />
                 </Link>
                 <div className="cs_post_right">
                   <span className="cs_posted_by">SLA</span>
@@ -547,8 +547,8 @@ export default function Home() {
               </div>
               <div className="cs_post cs_style_2">
                 <Link href="/blog" className="cs_post_thumb cs_radius_5 overflow-hidden cs_image_blur_effect">
-                  <img src="/assets/img/3d-labs/engineering1.png" alt="Post" />
-                  <img src="/assets/img/3d-labs/engineering2.png" alt="Post" />
+                  <img src="/assets/img/3d-labs/engineering1.webp" alt="Post" />
+                  <img src="/assets/img/3d-labs/engineering2.webp" alt="Post" />
                 </Link>
                 <div className="cs_post_right">
                   <span className="cs_posted_by">FDM</span>

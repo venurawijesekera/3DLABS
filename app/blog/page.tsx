@@ -39,7 +39,7 @@ export default function Blog() {
                             </Link>
                         </div>
                         <div className="cs_post_right">
-                            <Link href="/blog/multi-material-prints" className="cs_post_thumb cs_bg_filed" style={{ backgroundImage: "url('/assets/img/blog/castor1.png')" }}></Link>
+                            <Link href="/blog/multi-material-prints" className="cs_post_thumb cs_bg_filed" style={{ backgroundImage: "url('/assets/img/blog/castor1.webp')" }}></Link>
                         </div>
                     </div>
 
@@ -58,7 +58,7 @@ export default function Blog() {
                             </Link>
                         </div>
                         <div className="cs_post_right">
-                            <Link href="/blog/high-temperature-molds" className="cs_post_thumb cs_bg_filed" style={{ backgroundImage: "url('/assets/img/blog/mold1.png')" }}></Link>
+                            <Link href="/blog/high-temperature-molds" className="cs_post_thumb cs_bg_filed" style={{ backgroundImage: "url('/assets/img/blog/mold1.webp')" }}></Link>
                         </div>
                     </div>
 
@@ -77,7 +77,7 @@ export default function Blog() {
                             </Link>
                         </div>
                         <div className="cs_post_right">
-                            <Link href="/blog/skin-safe-medical-grade-parts" className="cs_post_thumb cs_bg_filed" style={{ backgroundImage: "url('/assets/img/blog/medical1.png')" }}></Link>
+                            <Link href="/blog/skin-safe-medical-grade-parts" className="cs_post_thumb cs_bg_filed" style={{ backgroundImage: "url('/assets/img/blog/medical1.webp')" }}></Link>
                         </div>
                     </div>
 

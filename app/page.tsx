@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import HeroViewer from '@/components/HeroViewer';
 
 export default function Home() {
@@ -147,7 +148,7 @@ export default function Home() {
               <div className="cs_image_box cs_style_1">
                 <div className="cs_image_box_number cs_primary_color cs_primary_font cs_fs_38 cs_semibold">02</div>
                 <Link href="/medical-sector" className="cs_image_box_img cs_radius_5 overflow-hidden">
-                  <img src="/assets/img/3d-labs/modle teeth200x200.png" alt="Service" />
+                  <img src="/assets/img/3d-labs/modle-teeth-200.png" alt="Service" loading="lazy" decoding="async" />
                 </Link>
                 <div className="cs_image_box_info position-relative">
                   <h2 className="cs_image_box_title cs_fs_29 cs_semibold"><Link href="/medical-sector">MEDICAL & HEALTHCARE</Link></h2>
@@ -258,7 +259,9 @@ export default function Home() {
             <div className="cs_grid_sizer"></div>
             <div className="cs_isotop_item">
               <div className="cs_portfolio cs_style_1">
-                <Link href="/material" className="cs_portfolio_thumb cs_radius_5"><img src="/assets/img/3d-labs/fan 4.png" alt="Portfolio" /></Link>
+                <Link href="/material" className="cs_portfolio_thumb cs_radius_5">
+                  <img src="/assets/img/3d-labs/fan-4.png" alt="Portfolio" loading="lazy" />
+                </Link>
                 <div className="cs_portfolio_info">
                   <h2 className="cs_portfolio_title cs_fs_38"><Link href="/material">Plastics</Link></h2>
                   <Link href="/material" className="cs_portfolio_btn">Visit Gallery</Link>
@@ -267,7 +270,9 @@ export default function Home() {
             </div>
             <div className="cs_isotop_item">
               <div className="cs_portfolio cs_style_1">
-                <Link href="/material" className="cs_portfolio_thumb cs_radius_5"><img src="/assets/img/3d-labs/samarisinghe large part side by side.png" alt="Portfolio" /></Link>
+                <Link href="/material" className="cs_portfolio_thumb cs_radius_5">
+                  <img src="/assets/img/3d-labs/samarisinghe-side-by-side.png" alt="Portfolio" loading="lazy" />
+                </Link>
                 <div className="cs_portfolio_info">
                   <h2 className="cs_portfolio_title cs_fs_38"><Link href="/material">Resins</Link></h2>
                   <Link href="/material" className="cs_portfolio_btn">Visit Gallery</Link>

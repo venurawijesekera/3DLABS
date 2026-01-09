@@ -134,14 +134,22 @@ export default function AdminDashboard() {
                 variants: JSON.stringify(productForm.variants),
                 has_variants: productForm.has_variants ? 1 : 0
             };
+            const payload = JSON.stringify({
+                action,
+                token: 'admin-access-token',
+                product: editingProduct ? { ...productData, id: editingProduct.id } : productData
+            });
+
+            if (payload.length > 5 * 1024 * 1024) { // 5MB limit check
+                alert("The total size of images is too large. Please use fewer or smaller images.");
+                setLoading(false);
+                return;
+            }
+
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action,
-                    token: 'admin-access-token',
-                    product: editingProduct ? { ...productData, id: editingProduct.id } : productData
-                })
+                body: payload
             });
             const data = await res.json();
             if (data.success) {
@@ -223,7 +231,41 @@ export default function AdminDashboard() {
         setProductForm({ ...productForm, variants: newVars });
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const resizeImage = (file: File): Promise<string> => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const max_size = 1200;
+
+                    if (width > height) {
+                        if (width > max_size) {
+                            height *= max_size / width;
+                            width = max_size;
+                        }
+                    } else {
+                        if (height > max_size) {
+                            width *= max_size / height;
+                            height = max_size;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx?.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.8)); // Compress to 80% JPEG
+                };
+                img.src = e.target?.result as string;
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (!files) return;
 
@@ -231,19 +273,14 @@ export default function AdminDashboard() {
         const remainingSlots = 10 - currentImages.length;
         const filesToProcess = Array.from(files).slice(0, remainingSlots);
 
-        filesToProcess.forEach(file => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64String = reader.result as string;
-                setProductForm((prev: any) => {
-                    const updatedImgs = [...prev.images.filter((img: string) => img.trim() !== ''), base64String];
-                    // Pad back to 10 slots
-                    while (updatedImgs.length < 10) updatedImgs.push('');
-                    return { ...prev, images: updatedImgs };
-                });
-            };
-            reader.readAsDataURL(file);
-        });
+        for (const file of filesToProcess) {
+            const compressedBase64 = await resizeImage(file);
+            setProductForm((prev: any) => {
+                const updatedImgs = [...prev.images.filter((img: string) => img.trim() !== ''), compressedBase64];
+                while (updatedImgs.length < 10) updatedImgs.push('');
+                return { ...prev, images: updatedImgs };
+            });
+        }
     };
 
     const removeImage = (idx: number) => {

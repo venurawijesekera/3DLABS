@@ -170,7 +170,7 @@ export default function ProfilePage() {
     if (!user) return null;
 
     return (
-        <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', padding: '100px 20px 40px' }}>
+        <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', padding: '140px 20px 40px' }}>
             {/* Header / Sub-nav */}
             <div style={{
                 maxWidth: '1300px', margin: '0 auto 30px', display: 'flex', justifyContent: 'flex-end', gap: '15px'

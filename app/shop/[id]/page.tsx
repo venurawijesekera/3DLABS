@@ -241,7 +241,7 @@ export default function ProductDetailPage() {
 const containerStyle: React.CSSProperties = {
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '40px 20px',
+    padding: '140px 20px 40px',
 };
 
 const breadcrumbsStyle: React.CSSProperties = {

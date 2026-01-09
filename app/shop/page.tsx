@@ -47,7 +47,7 @@ export default function ShopPage() {
     });
 
     return (
-        <div style={{ backgroundColor: '#000', minHeight: '100vh', padding: '120px 20px 60px' }}>
+        <div style={{ backgroundColor: '#000', minHeight: '100vh', padding: '140px 20px 60px' }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
                 {/* Header & Controls */}
@@ -55,7 +55,7 @@ export default function ShopPage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px' }}>
                         <div>
                             <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', margin: 0, color: '#fff' }}>
-                                3D Labs <span style={{ color: '#ffa415' }}>Shop</span>
+                                3D LABS <span style={{ color: '#ffa415' }}>Shop</span>
                             </h1>
                             <p style={{ color: '#888', marginTop: '10px' }}>Showing 1–{sortedProducts.length} of {products.length} results</p>
                         </div>

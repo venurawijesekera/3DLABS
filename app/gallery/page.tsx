@@ -42,8 +42,7 @@ export default function Gallery() {
 
     return (
         <>
-            <div className="cs_height_30 cs_height_lg_30"></div>
-            <div className="cs_height_50 cs_height_lg_30"></div>
+            <div className="cs_height_140 cs_height_lg_80"></div>
             <div className="cs_section_heading cs_style_1 cs_type_3 text-center">
                 <div className="container">
                     <p className="cs_section_subtitle cs_accent_color cs_fs_21 mb-0 wow fadeInLeft" data-wow-duration="0.8s" data-wow-delay="0.2s">Work Gallery</p>

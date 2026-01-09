@@ -257,7 +257,7 @@ export default function InstantQuotePage() {
     }
       `}</style>
 
-      <div className="cs_height_90 cs_height_lg_80"></div>
+      <div className="cs_height_140 cs_height_lg_80"></div>
 
       <div className="container py-5">
         <div className="text-center mb-5">

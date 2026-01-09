@@ -152,65 +152,70 @@ function ProductCard({ product }: { product: any }) {
         if (product.image_url) imageUrl = product.image_url;
     }
 
-    const handleBuy = () => {
+    const handleBuy = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
         const text = encodeURIComponent(`Hi 3D Labs! I want to buy: ${product.name} (LKR ${product.price.toLocaleString()})`);
         window.open(`https://wa.me/94770415307?text=${text}`, '_blank');
     };
 
     return (
-        <div className="product-card" style={cardStyle}>
-            <div style={imageContainerStyle}>
-                <img src={imageUrl} alt={product.name} style={imageStyle} />
-                {discount > 0 && <div style={badgeStyle}>{discount}% OFF</div>}
-                <div className="card-overlay" style={overlayStyle}>
-                    <button onClick={handleBuy} style={actionBtnStyle}>
-                        <i className="fa-brands fa-whatsapp"></i> Buy on WhatsApp
-                    </button>
-                </div>
-            </div>
-            <div style={{ padding: '20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '5px' }}>
-                    <span style={{ fontSize: '11px', color: '#ffa415', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>{product.category}</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: '#ffa415' }}>
-                        <i className="fa-solid fa-star"></i>
-                        <span>{product.rating || '5.0'}</span>
+        <Link href={`/shop/${product.id}`} style={{ textDecoration: 'none' }}>
+            <div className="product-card" style={cardStyle}>
+                <div style={imageContainerStyle}>
+                    <img src={imageUrl} alt={product.name} style={imageStyle} />
+                    {discount > 0 && <div style={badgeStyle}>{discount}% OFF</div>}
+                    <div className="card-overlay" style={overlayStyle}>
+                        <button onClick={handleBuy} style={actionBtnStyle}>
+                            <i className="fa-brands fa-whatsapp"></i> Buy on WhatsApp
+                        </button>
                     </div>
                 </div>
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 5px 0', color: '#fff' }}>{product.name}</h3>
-                <div style={{ fontSize: '12px', color: '#888', marginBottom: '10px' }}>
-                    {product.brand_name && <span>{product.brand_name}</span>}
-                    {product.brand_name && product.material && <span style={{ margin: '0 5px' }}>|</span>}
-                    {product.material && <span>{product.material}</span>}
-                </div>
-                <p style={{ fontSize: '13px', color: '#888', margin: '0 0 15px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', height: '36px' }}>
-                    {product.description}
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                        <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#fff' }}>LKR {product.price.toLocaleString()}</span>
-                        {product.original_price > 0 && (
-                            <span style={{ fontSize: '14px', color: '#666', textDecoration: 'line-through', marginLeft: '10px' }}>LKR {product.original_price.toLocaleString()}</span>
-                        )}
+                <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', height: 'calc(100% - 220px)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '5px' }}>
+                        <span style={{ fontSize: '11px', color: '#ffa415', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>{product.category}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: '#ffa415' }}>
+                            <i className="fa-solid fa-star"></i>
+                            <span>{product.rating || '5.0'}</span>
+                        </div>
                     </div>
-                    <Link href={`/instant-quote`} style={{ color: '#ffa415', fontSize: '12px', textDecoration: 'none' }}>
-                        Custom Quote <i className="fa-solid fa-arrow-right" style={{ fontSize: '10px' }}></i>
-                    </Link>
-                </div>
-            </div>
+                    <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 5px 0', color: '#fff' }}>{product.name}</h3>
+                    <div style={{ fontSize: '12px', color: '#888', marginBottom: '10px' }}>
+                        {product.brand_name && <span>{product.brand_name}</span>}
+                        {product.brand_name && product.material && <span style={{ margin: '0 5px' }}>|</span>}
+                        {product.material && <span>{product.material}</span>}
+                    </div>
+                    <p style={{ fontSize: '13px', color: '#888', margin: '0 0 15px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', height: '36px' }}>
+                        {product.description}
+                    </p>
 
-            <style jsx>{`
-                .product-card:hover .card-overlay {
-                    opacity: 1;
-                }
-                .product-card {
-                    transition: transform 0.3s ease, border-color 0.3s ease;
-                }
-                .product-card:hover {
-                    transform: translateY(-10px);
-                    border-color: rgba(255, 164, 21, 0.3) !important;
-                }
-            `}</style>
-        </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 'auto' }}>
+                        <div>
+                            <div style={{ fontSize: '12px', color: '#555', marginBottom: '2px' }}>Price</div>
+                            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#ffa415' }}>LKR {product.price.toLocaleString()}</div>
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#ffa415', fontWeight: 'bold' }}>
+                            View Details <i className="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <style jsx>{`
+                    .product-card:hover .card-overlay {
+                        opacity: 1;
+                    }
+                    .product-card {
+                        transition: transform 0.3s ease, border-color 0.3s ease;
+                        height: 420px;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .product-card:hover {
+                        transform: translateY(-10px);
+                        border-color: rgba(255, 164, 21, 0.3) !important;
+                    }
+                `}</style>
+            </div>
+        </Link>
     );
 }
 

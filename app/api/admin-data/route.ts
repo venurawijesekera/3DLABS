@@ -131,33 +131,43 @@ export async function POST(request: NextRequest) {
 
     // 11. Add Product
     if (data.action === 'add_product') {
-        const { name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants } = data.product;
-        await db.prepare(`
-            INSERT INTO products (name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).bind(name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants).run();
+        try {
+            const { name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants } = data.product;
+            await db.prepare(`
+                INSERT INTO products (name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).bind(name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants).run();
 
-        await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
-            .bind("ADD_PRODUCT", `Added new product: ${name}`).run();
+            await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
+                .bind("ADD_PRODUCT", `Added new product: ${name}`).run();
 
-        return NextResponse.json({ success: true });
+            return NextResponse.json({ success: true });
+        } catch (e: any) {
+            console.error("Add Product Error:", e);
+            return NextResponse.json({ success: false, error: e.message }, { status: 500 });
+        }
     }
 
     // 12. Update Product
     if (data.action === 'update_product') {
-        const { id, name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants } = data.product;
-        await db.prepare(`
-            UPDATE products SET 
-                name = ?, description = ?, price = ?, original_price = ?, category = ?, 
-                images = ?, labels = ?, brand_name = ?, material = ?, stock_status = ?, 
-                warranty = ?, shipping_delivery = ?, has_variants = ?, variants = ? 
-            WHERE id = ?
-        `).bind(name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants, id).run();
+        try {
+            const { id, name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants } = data.product;
+            await db.prepare(`
+                UPDATE products SET 
+                    name = ?, description = ?, price = ?, original_price = ?, category = ?, 
+                    images = ?, labels = ?, brand_name = ?, material = ?, stock_status = ?, 
+                    warranty = ?, shipping_delivery = ?, has_variants = ?, variants = ? 
+                WHERE id = ?
+            `).bind(name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants, id).run();
 
-        await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
-            .bind("UPDATE_PRODUCT", `Updated product: ${name}`).run();
+            await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
+                .bind("UPDATE_PRODUCT", `Updated product: ${name}`).run();
 
-        return NextResponse.json({ success: true });
+            return NextResponse.json({ success: true });
+        } catch (e: any) {
+            console.error("Update Product Error:", e);
+            return NextResponse.json({ success: false, error: e.message }, { status: 500 });
+        }
     }
 
     // 13. Delete Product

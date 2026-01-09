@@ -9,7 +9,7 @@ export default function AdminDashboard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<'clients' | 'orders' | 'logs' | 'shop'>('orders');
+    const [activeTab, setActiveTab] = useState<'clients' | 'orders' | 'logs' | 'shop' | 'materials'>('orders');
 
     const [clients, setClients] = useState<any[]>([]);
     const [quotes, setQuotes] = useState<any[]>([]);
@@ -33,6 +33,18 @@ export default function AdminDashboard() {
         warranty: '', shipping_delivery: '', has_variants: false, variants: []
     });
 
+    // Material State
+    const [materials, setMaterials] = useState<any[]>([]);
+    const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
+    const [editingMaterial, setEditingMaterial] = useState<any>(null);
+    const [materialForm, setMaterialForm] = useState<any>({
+        slug: '', name: '', long_name: '', image: '', tag: '',
+        short_description: '', description_2: '',
+        properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
+        specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
+        applications: { description: '', list: ['', '', '', '', '', ''], image: '' }
+    });
+
     useEffect(() => {
         const token = localStorage.getItem('3dlabs_admin_token');
         if (token === 'admin-access-token') {
@@ -46,6 +58,9 @@ export default function AdminDashboard() {
         fetchQuotes();
         fetchLogs();
         fetchProducts();
+        fetchLogs();
+        fetchProducts();
+        fetchMaterials();
     };
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -123,6 +138,90 @@ export default function AdminDashboard() {
             const data = await res.json();
             setProducts(data);
         } catch (err) { console.error(err); }
+    };
+
+    const fetchMaterials = async () => {
+        try {
+            const res = await fetch('/api/admin-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'get_materials', token: 'admin-access-token' })
+            });
+            const data = await res.json();
+            setMaterials(data);
+        } catch (err) { console.error(err); }
+    };
+
+    const handleSaveMaterial = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const action = editingMaterial ? 'update_material' : 'add_material';
+
+            // Prepare payload
+            const payloadData = {
+                ...materialForm,
+                properties: JSON.stringify(materialForm.properties),
+                specifications: JSON.stringify(materialForm.specifications),
+                applications: JSON.stringify(materialForm.applications)
+            };
+
+            const res = await fetch('/api/admin-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action,
+                    token: 'admin-access-token',
+                    material: editingMaterial ? { ...payloadData, id: editingMaterial.id } : payloadData
+                })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                setIsMaterialModalOpen(false);
+                setEditingMaterial(null);
+                setMaterialForm({
+                    slug: '', name: '', long_name: '', image: '', tag: '',
+                    short_description: '', description_2: '',
+                    properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
+                    specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
+                    applications: { description: '', list: ['', '', '', '', '', ''], image: '' }
+                });
+                fetchMaterials();
+                fetchLogs();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        } catch (err) { console.error(err); }
+        finally { setLoading(false); }
+    };
+
+    const deleteMaterial = async (id: number) => {
+        if (!confirm('Are you sure you want to delete this material?')) return;
+        try {
+            const res = await fetch('/api/admin-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delete_material', token: 'admin-access-token', id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchMaterials();
+                fetchLogs();
+            }
+        } catch (err) { console.error(err); }
+    };
+
+    const openEditMaterial = (m: any) => {
+        setEditingMaterial(m);
+        setMaterialForm({
+            slug: m.slug, name: m.name, long_name: m.long_name, image: m.image, tag: m.tag,
+            short_description: m.short_description, description_2: m.description_2,
+            properties: JSON.parse(m.properties || '{}'),
+            specifications: JSON.parse(m.specifications || '{}'),
+            applications: JSON.parse(m.applications || '{}')
+        });
+        setIsMaterialModalOpen(true);
     };
 
     const handleSaveProduct = async (e: React.FormEvent) => {
@@ -464,6 +563,13 @@ export default function AdminDashboard() {
                     >
                         <i className="fa-solid fa-store" style={{ marginRight: '8px' }}></i> Shop Products
                     </button>
+                    <button
+                        onClick={() => setActiveTab('materials')}
+                        className={activeTab === 'materials' ? 'active-tab' : 'tab'}
+                        style={{ ...tabStyle, ...(activeTab === 'materials' ? activeTabStyle : {}) }}
+                    >
+                        <i className="fa-solid fa-layer-group" style={{ marginRight: '8px' }}></i> Materials
+                    </button>
                 </div>
 
                 {/* Content Sections */}
@@ -650,6 +756,69 @@ export default function AdminDashboard() {
                                                         <i className="fa-solid fa-pen"></i>
                                                     </button>
                                                     <button onClick={() => deleteProduct(p.id)} style={{ ...saveBtnStyle, borderColor: '#ff4c4c', color: '#ff4c4c', padding: '5px 10px', fontSize: '12px' }}>
+                                                        <i className="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'materials' && (
+                    <div className="cs_card" style={cardStyle}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <h4 style={{ margin: 0 }}>Materials Management</h4>
+                            <button onClick={() => {
+                                setEditingMaterial(null);
+                                setMaterialForm({
+                                    slug: '', name: '', long_name: '', image: '', tag: '',
+                                    short_description: '', description_2: '',
+                                    properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
+                                    specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
+                                    applications: { description: '', list: ['', '', '', '', '', ''], image: '' }
+                                });
+                                setIsMaterialModalOpen(true);
+                            }} style={actionBtnStyle}>
+                                <i className="fa-solid fa-plus"></i> Add New Material
+                            </button>
+                        </div>
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={tableStyle}>
+                                <thead>
+                                    <tr>
+                                        <th style={thStyle}>Image</th>
+                                        <th style={thStyle}>Material</th>
+                                        <th style={thStyle}>Tag/Title</th>
+                                        <th style={thStyle}>Description</th>
+                                        <th style={thStyle}>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {materials.map(m => (
+                                        <tr key={m.id} style={trStyle}>
+                                            <td style={tdStyle}>
+                                                <img src={m.image || '/assets/img/3logo.webp'} alt={m.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' }} />
+                                            </td>
+                                            <td style={tdStyle}>
+                                                <div style={{ fontWeight: 'bold' }}>{m.name}</div>
+                                                <div style={{ fontSize: '0.8em', color: '#888' }}>{m.long_name}</div>
+                                            </td>
+                                            <td style={tdStyle}>{m.tag}</td>
+                                            <td style={tdStyle}>
+                                                <div style={{ fontSize: '0.8em', color: '#888', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                    {m.short_description}
+                                                </div>
+                                            </td>
+                                            <td style={tdStyle}>
+                                                <div style={{ display: 'flex', gap: '10px' }}>
+                                                    <button onClick={() => openEditMaterial(m)} style={{ ...saveBtnStyle, padding: '5px 10px', fontSize: '12px' }}>
+                                                        <i className="fa-solid fa-pen"></i>
+                                                    </button>
+                                                    <button onClick={() => deleteMaterial(m.id)} style={{ ...saveBtnStyle, borderColor: '#ff4c4c', color: '#ff4c4c', padding: '5px 10px', fontSize: '12px' }}>
                                                         <i className="fa-solid fa-trash"></i>
                                                     </button>
                                                 </div>
@@ -891,6 +1060,153 @@ export default function AdminDashboard() {
                             <button type="submit" disabled={loading} style={{ ...saveBtnStyle, width: '100%', marginTop: '30px', padding: '15px', fontSize: '16px' }}>
                                 {loading ? 'Saving Product...' : 'Confirm & Save Product'}
                             </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Material Modal */}
+            {isMaterialModalOpen && (
+                <div style={modalOverlayStyle}>
+                    <div style={{ ...modalContentStyle, maxWidth: '900px', height: 'auto', maxHeight: '90vh' }}>
+                        <div style={modalHeaderStyle}>
+                            <h4 style={{ margin: 0 }}>{editingMaterial ? 'Edit Material' : 'Add New Material'}</h4>
+                            <button onClick={() => setIsMaterialModalOpen(false)} style={closeBtnStyle}>×</button>
+                        </div>
+                        <form onSubmit={handleSaveMaterial} style={{ padding: '30px', overflowY: 'auto' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                                {/* Basic Info */}
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px' }}>Basic Details</h5>
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Material Name (e.g. PLA)</label>
+                                    <input type="text" required value={materialForm.name} onChange={e => setMaterialForm({ ...materialForm, name: e.target.value, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })} style={{ ...inputStyle, width: '100%' }} />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Slug (Auto-generated)</label>
+                                    <input type="text" required value={materialForm.slug} readOnly style={{ ...inputStyle, width: '100%', opacity: 0.7 }} />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Material Long Name</label>
+                                    <input type="text" value={materialForm.long_name} onChange={e => setMaterialForm({ ...materialForm, long_name: e.target.value })} style={{ ...inputStyle, width: '100%' }} />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Tag / Title (e.g. Standard Material)</label>
+                                    <input type="text" value={materialForm.tag} onChange={e => setMaterialForm({ ...materialForm, tag: e.target.value })} style={{ ...inputStyle, width: '100%' }} />
+                                </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Main Image</label>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        {materialForm.image && <img src={materialForm.image} alt="Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '5px' }} />}
+                                        <input type="file" onChange={async (e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                const base64 = await resizeImage(file);
+                                                setMaterialForm({ ...materialForm, image: base64 });
+                                            }
+                                        }} style={{ color: '#aaa' }} />
+                                    </div>
+                                </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Short Description (Card)</label>
+                                    <textarea value={materialForm.short_description} onChange={e => setMaterialForm({ ...materialForm, short_description: e.target.value })} style={{ ...inputStyle, width: '100%' }} rows={3} />
+                                </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Detailed Description (Page Header)</label>
+                                    <textarea value={materialForm.description_2} onChange={e => setMaterialForm({ ...materialForm, description_2: e.target.value })} style={{ ...inputStyle, width: '100%' }} rows={3} />
+                                </div>
+
+                                {/* Properties */}
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '20px' }}>Progress Stats (0-100)</h5>
+                                </div>
+                                {['Strength', 'Stiffness', 'Durability', 'Heat Resistance', 'Chemical Resistance', 'Surface Quality'].map(prop => {
+                                    const key = prop.toLowerCase().replace(/ /g, '_');
+                                    return (
+                                        <div key={prop}>
+                                            <label style={labelStyle}>{prop} (%)</label>
+                                            <input type="number" min="0" max="100" value={materialForm.properties[key] || 0}
+                                                onChange={e => setMaterialForm({
+                                                    ...materialForm,
+                                                    properties: { ...materialForm.properties, [key]: parseInt(e.target.value) }
+                                                })}
+                                                style={{ ...inputStyle, width: '100%' }} />
+                                        </div>
+                                    );
+                                })}
+
+                                {/* Specifications */}
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '20px' }}>Technical Specifications</h5>
+                                </div>
+                                {[
+                                    { label: 'Density', key: 'density' }, { label: 'Tensile Strength', key: 'tensile_strength' },
+                                    { label: 'Elongation at Break', key: 'elongation' }, { label: 'Flexural Strength', key: 'flexural_strength' },
+                                    { label: 'Heat Deflection Temp', key: 'temp_deflection' }, { label: 'Hardness', key: 'hardness' },
+                                    { label: 'Printing Temp', key: 'print_temp' }, { label: 'Bed Temp', key: 'bed_temp' }
+                                ].map(spec => (
+                                    <div key={spec.key}>
+                                        <label style={labelStyle}>{spec.label}</label>
+                                        <input type="text" value={materialForm.specifications[spec.key] || ''}
+                                            onChange={e => setMaterialForm({
+                                                ...materialForm,
+                                                specifications: { ...materialForm.specifications, [spec.key]: e.target.value }
+                                            })}
+                                            style={{ ...inputStyle, width: '100%' }} />
+                                    </div>
+                                ))}
+
+                                {/* Applications */}
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '20px' }}>Typical Applications</h5>
+                                </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Application Description</label>
+                                    <textarea value={materialForm.applications.description} onChange={e => setMaterialForm({
+                                        ...materialForm,
+                                        applications: { ...materialForm.applications, description: e.target.value }
+                                    })} style={{ ...inputStyle, width: '100%' }} rows={2} />
+                                </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Application Image</label>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        {materialForm.applications.image && <img src={materialForm.applications.image} alt="App Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '5px' }} />}
+                                        <input type="file" onChange={async (e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                const base64 = await resizeImage(file);
+                                                setMaterialForm({
+                                                    ...materialForm,
+                                                    applications: { ...materialForm.applications, image: base64 }
+                                                });
+                                            }
+                                        }} style={{ color: '#aaa' }} />
+                                    </div>
+                                </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Application List (6 lines)</label>
+                                </div>
+                                {[0, 1, 2, 3, 4, 5].map(idx => (
+                                    <div key={idx} style={{ gridColumn: 'span 1' }}>
+                                        <input type="text" placeholder={`Application ${idx + 1}`} value={materialForm.applications.list[idx] || ''}
+                                            onChange={e => {
+                                                const newList = [...materialForm.applications.list];
+                                                newList[idx] = e.target.value;
+                                                setMaterialForm({
+                                                    ...materialForm,
+                                                    applications: { ...materialForm.applications, list: newList }
+                                                });
+                                            }}
+                                            style={{ ...inputStyle, width: '100%' }} />
+                                    </div>
+                                ))}
+
+                            </div>
+                            <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
+                                <button type="button" onClick={() => setIsMaterialModalOpen(false)} style={{ ...actionBtnStyle, backgroundColor: 'transparent', border: '1px solid #666', color: '#ccc' }}>Cancel</button>
+                                <button type="submit" disabled={loading} style={saveBtnStyle}>{loading ? 'Saving...' : 'Save Material'}</button>
+                            </div>
                         </form>
                     </div>
                 </div>

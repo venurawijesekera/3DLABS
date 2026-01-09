@@ -1,0 +1,1 @@
+-- Duplicate migration 0007, skipped

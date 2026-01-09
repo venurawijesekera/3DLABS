@@ -1,0 +1,1 @@
+ALTER TABLE quotes ADD COLUMN amount_paid REAL DEFAULT 0;

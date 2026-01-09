@@ -1,0 +1,1 @@
+ALTER TABLE quotes ADD COLUMN file_details TEXT DEFAULT '[]';

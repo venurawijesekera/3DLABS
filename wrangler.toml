@@ -1,4 +1,5 @@
 name = "3dlabs"
+account_id = "ee72041690c3a4eebbee3c63f500e1d9"
 compatibility_date = "2024-11-01"
 compatibility_flags = [ "nodejs_compat" ]
 pages_build_output_dir = ".vercel/output/static"
@@ -6,4 +7,4 @@ pages_build_output_dir = ".vercel/output/static"
 [[d1_databases]]
 binding = "DB"
 database_name = "3dlabs-db"
-database_id = "83ef0c1e-ff50-4692-9361-064063243a0f"
+database_id = "46c5cad6-05ff-440d-a2da-90a63e646547"

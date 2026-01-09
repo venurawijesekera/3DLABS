@@ -178,5 +178,61 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true });
     }
 
+    // --- MATERIALS Management ---
+
+    // 14. Get Materials
+    if (data.action === 'get_materials') {
+        const { results } = await db.prepare("SELECT * FROM materials ORDER BY id ASC").all();
+        return NextResponse.json(results);
+    }
+
+    // 15. Add Material
+    if (data.action === 'add_material') {
+        try {
+            const { slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications } = data.material;
+            await db.prepare(`
+                INSERT INTO materials (slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).bind(slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications).run();
+
+            await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
+                .bind("ADD_MATERIAL", `Added new material: ${name}`).run();
+
+            return NextResponse.json({ success: true });
+        } catch (e: any) {
+            console.error("Add Material Error:", e);
+            return NextResponse.json({ success: false, error: e.message }, { status: 500 });
+        }
+    }
+
+    // 16. Update Material
+    if (data.action === 'update_material') {
+        try {
+            const { id, slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications } = data.material;
+            await db.prepare(`
+                UPDATE materials SET 
+                    slug = ?, name = ?, long_name = ?, image = ?, tag = ?, 
+                    short_description = ?, description_2 = ?, properties = ?, specifications = ?, applications = ?
+                WHERE id = ?
+            `).bind(slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications, id).run();
+
+            await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
+                .bind("UPDATE_MATERIAL", `Updated material: ${name}`).run();
+
+            return NextResponse.json({ success: true });
+        } catch (e: any) {
+            console.error("Update Material Error:", e);
+            return NextResponse.json({ success: false, error: e.message }, { status: 500 });
+        }
+    }
+
+    // 17. Delete Material
+    if (data.action === 'delete_material') {
+        await db.prepare("DELETE FROM materials WHERE id = ?").bind(data.id).run();
+        await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
+            .bind("DELETE_MATERIAL", `Deleted material ID: ${data.id}`).run();
+        return NextResponse.json({ success: true });
+    }
+
     return NextResponse.json("Invalid Action", { status: 400 });
 }

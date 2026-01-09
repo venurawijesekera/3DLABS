@@ -1,5 +1,4 @@
 name = "3dlabs"
-account_id = "ee72041690c3a4eebbee3c63f500e1d9"
 compatibility_date = "2024-11-01"
 compatibility_flags = [ "nodejs_compat" ]
 pages_build_output_dir = ".vercel/output/static"

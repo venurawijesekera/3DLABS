@@ -140,8 +140,10 @@ export default function AdminDashboard() {
                 product: editingProduct ? { ...productData, id: editingProduct.id } : productData
             });
 
-            if (payload.length > 5 * 1024 * 1024) { // 5MB limit check
-                alert("The total size of images is too large. Please use fewer or smaller images.");
+            console.log("Payload size:", (payload.length / 1024).toFixed(2), "KB");
+
+            if (payload.length > 1024 * 1024) { // D1 1MB statement limit check
+                alert(`The total size of images is too large (${(payload.length / 1024 / 1024).toFixed(2)}MB). Cloudflare D1 has a 1MB limit. Please use fewer images or lower quality.`);
                 setLoading(false);
                 return;
             }
@@ -151,6 +153,12 @@ export default function AdminDashboard() {
                 headers: { 'Content-Type': 'application/json' },
                 body: payload
             });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(errorText || `Server returned ${res.status}`);
+            }
+
             const data = await res.json();
             if (data.success) {
                 setIsProductModalOpen(false);
@@ -164,7 +172,10 @@ export default function AdminDashboard() {
                 fetchProducts();
                 fetchLogs();
             }
-        } catch (err) { alert('Failed to save product'); }
+        } catch (err: any) {
+            console.error("Save Error:", err);
+            alert(`Failed to save product: ${err.message || 'Unknown Error'}`);
+        }
         finally { setLoading(false); }
     };
 
@@ -240,7 +251,7 @@ export default function AdminDashboard() {
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-                    const max_size = 1200;
+                    const max_size = 800; // Reduced from 1200 to stay under D1 1MB limit
 
                     if (width > height) {
                         if (width > max_size) {
@@ -257,7 +268,7 @@ export default function AdminDashboard() {
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx?.drawImage(img, 0, 0, width, height);
-                    resolve(canvas.toDataURL('image/jpeg', 0.8)); // Compress to 80% JPEG
+                    resolve(canvas.toDataURL('image/jpeg', 0.5)); // Reduced from 0.8 to 0.5 for better compression
                 };
                 img.src = e.target?.result as string;
             };

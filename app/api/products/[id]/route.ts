@@ -5,11 +5,11 @@ export const runtime = 'edge';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const { env } = getRequestContext();
     const db = (env as any).DB;
-    const id = params.id;
+    const { id } = await params;
 
     try {
         const product = await db.prepare("SELECT * FROM products WHERE id = ?").bind(id).first();

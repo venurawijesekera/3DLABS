@@ -30,7 +30,8 @@ export default function ShopPage() {
 
     const filteredProducts = products.filter(p => {
         const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-            p.description.toLowerCase().includes(search.toLowerCase());
+            p.description.toLowerCase().includes(search.toLowerCase()) ||
+            (p.labels && p.labels.toLowerCase().includes(search.toLowerCase()));
         const matchesCategory = category === 'All' || p.category === category;
         return matchesSearch && matchesCategory;
     });
@@ -143,6 +144,14 @@ function ProductCard({ product }: { product: any }) {
         ? Math.round(((product.original_price - product.price) / product.original_price) * 100)
         : 0;
 
+    let imageUrl = '/assets/img/3logo.webp';
+    try {
+        const imgs = JSON.parse(product.images || '[]');
+        if (imgs.length > 0) imageUrl = imgs[0];
+    } catch (e) {
+        if (product.image_url) imageUrl = product.image_url;
+    }
+
     const handleBuy = () => {
         const text = encodeURIComponent(`Hi 3D Labs! I want to buy: ${product.name} (LKR ${product.price.toLocaleString()})`);
         window.open(`https://wa.me/94770415307?text=${text}`, '_blank');
@@ -151,7 +160,7 @@ function ProductCard({ product }: { product: any }) {
     return (
         <div className="product-card" style={cardStyle}>
             <div style={imageContainerStyle}>
-                <img src={product.image_url} alt={product.name} style={imageStyle} />
+                <img src={imageUrl} alt={product.name} style={imageStyle} />
                 {discount > 0 && <div style={badgeStyle}>{discount}% OFF</div>}
                 <div className="card-overlay" style={overlayStyle}>
                     <button onClick={handleBuy} style={actionBtnStyle}>
@@ -167,7 +176,12 @@ function ProductCard({ product }: { product: any }) {
                         <span>{product.rating || '5.0'}</span>
                     </div>
                 </div>
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 10px 0', color: '#fff' }}>{product.name}</h3>
+                <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 5px 0', color: '#fff' }}>{product.name}</h3>
+                <div style={{ fontSize: '12px', color: '#888', marginBottom: '10px' }}>
+                    {product.brand_name && <span>{product.brand_name}</span>}
+                    {product.brand_name && product.material && <span style={{ margin: '0 5px' }}>|</span>}
+                    {product.material && <span>{product.material}</span>}
+                </div>
                 <p style={{ fontSize: '13px', color: '#888', margin: '0 0 15px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', height: '36px' }}>
                     {product.description}
                 </p>

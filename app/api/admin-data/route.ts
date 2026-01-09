@@ -131,11 +131,11 @@ export async function POST(request: NextRequest) {
 
     // 11. Add Product
     if (data.action === 'add_product') {
-        const { name, description, price, original_price, category, image_url, stock_status } = data.product;
+        const { name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants } = data.product;
         await db.prepare(`
-            INSERT INTO products (name, description, price, original_price, category, image_url, stock_status) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `).bind(name, description, price, original_price, category, image_url, stock_status).run();
+            INSERT INTO products (name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants).run();
 
         await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
             .bind("ADD_PRODUCT", `Added new product: ${name}`).run();
@@ -145,11 +145,14 @@ export async function POST(request: NextRequest) {
 
     // 12. Update Product
     if (data.action === 'update_product') {
-        const { id, name, description, price, original_price, category, image_url, stock_status } = data.product;
+        const { id, name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants } = data.product;
         await db.prepare(`
-            UPDATE products SET name = ?, description = ?, price = ?, original_price = ?, category = ?, image_url = ?, stock_status = ? 
+            UPDATE products SET 
+                name = ?, description = ?, price = ?, original_price = ?, category = ?, 
+                images = ?, labels = ?, brand_name = ?, material = ?, stock_status = ?, 
+                warranty = ?, shipping_delivery = ?, has_variants = ?, variants = ? 
             WHERE id = ?
-        `).bind(name, description, price, original_price, category, image_url, stock_status, id).run();
+        `).bind(name, description, price, original_price, category, images, labels, brand_name, material, stock_status, warranty, shipping_delivery, has_variants, variants, id).run();
 
         await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
             .bind("UPDATE_PRODUCT", `Updated product: ${name}`).run();

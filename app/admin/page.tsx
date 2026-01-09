@@ -24,9 +24,11 @@ export default function AdminDashboard() {
     const [products, setProducts] = useState<any[]>([]);
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<any>(null);
-    const [productForm, setProductForm] = useState({
+    const [productForm, setProductForm] = useState<any>({
         name: '', description: '', price: 0, original_price: 0,
-        category: 'Accessories', image_url: '', stock_status: 'In Stock'
+        category: 'Accessories', images: ['', '', '', '', '', '', '', '', '', ''],
+        labels: '', brand_name: '', material: '', stock_status: 'In Stock',
+        warranty: '', shipping_delivery: '', has_variants: false, variants: []
     });
 
     useEffect(() => {
@@ -126,13 +128,19 @@ export default function AdminDashboard() {
         setLoading(true);
         try {
             const action = editingProduct ? 'update_product' : 'add_product';
+            const productData = {
+                ...productForm,
+                images: JSON.stringify(productForm.images.filter((img: string) => img.trim() !== '')),
+                variants: JSON.stringify(productForm.variants),
+                has_variants: productForm.has_variants ? 1 : 0
+            };
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     action,
                     token: 'admin-access-token',
-                    product: editingProduct ? { ...productForm, id: editingProduct.id } : productForm
+                    product: editingProduct ? { ...productData, id: editingProduct.id } : productData
                 })
             });
             const data = await res.json();
@@ -141,7 +149,9 @@ export default function AdminDashboard() {
                 setEditingProduct(null);
                 setProductForm({
                     name: '', description: '', price: 0, original_price: 0,
-                    category: 'Accessories', image_url: '', stock_status: 'In Stock'
+                    category: 'Accessories', images: ['', '', '', '', '', '', '', '', '', ''],
+                    labels: '', brand_name: '', material: '', stock_status: 'In Stock',
+                    warranty: '', shipping_delivery: '', has_variants: false, variants: []
                 });
                 fetchProducts();
                 fetchLogs();
@@ -168,12 +178,49 @@ export default function AdminDashboard() {
 
     const openEditProduct = (p: any) => {
         setEditingProduct(p);
+        let imgs = ['', '', '', '', '', '', '', '', '', ''];
+        try {
+            const parsed = JSON.parse(p.images || '[]');
+            parsed.forEach((url: string, i: number) => { if (i < 10) imgs[i] = url; });
+        } catch (e) { }
+
+        let vars = [];
+        try { vars = JSON.parse(p.variants || '[]'); } catch (e) { }
+
         setProductForm({
             name: p.name, description: p.description, price: p.price,
             original_price: p.original_price, category: p.category,
-            image_url: p.image_url, stock_status: p.stock_status
+            images: imgs, labels: p.labels || '', brand_name: p.brand_name || '',
+            material: p.material || '', stock_status: p.stock_status,
+            warranty: p.warranty || '', shipping_delivery: p.shipping_delivery || '',
+            has_variants: p.has_variants === 1, variants: vars
         });
         setIsProductModalOpen(true);
+    };
+
+    const updateProductImage = (idx: number, val: string) => {
+        const newImgs = [...productForm.images];
+        newImgs[idx] = val;
+        setProductForm({ ...productForm, images: newImgs });
+    };
+
+    const addVariant = () => {
+        setProductForm({
+            ...productForm,
+            variants: [...productForm.variants, { name: '', color: '#ffffff', price: productForm.price, stock: 'In Stock' }]
+        });
+    };
+
+    const removeVariant = (idx: number) => {
+        const newVars = [...productForm.variants];
+        newVars.splice(idx, 1);
+        setProductForm({ ...productForm, variants: newVars });
+    };
+
+    const updateVariant = (idx: number, field: string, val: any) => {
+        const newVars = [...productForm.variants];
+        newVars[idx] = { ...newVars[idx], [field]: val };
+        setProductForm({ ...productForm, variants: newVars });
     };
 
     const updateQuoteStatus = async (quote: any) => {
@@ -468,7 +515,16 @@ export default function AdminDashboard() {
                     <div className="cs_card" style={cardStyle}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                             <h4 style={{ margin: 0 }}>Shop Product Management</h4>
-                            <button onClick={() => { setEditingProduct(null); setIsProductModalOpen(true); }} style={actionBtnStyle}>
+                            <button onClick={() => {
+                                setEditingProduct(null);
+                                setProductForm({
+                                    name: '', description: '', price: 0, original_price: 0,
+                                    category: 'Accessories', images: ['', '', '', '', '', '', '', '', '', ''],
+                                    labels: '', brand_name: '', material: '', stock_status: 'In Stock',
+                                    warranty: '', shipping_delivery: '', has_variants: false, variants: []
+                                });
+                                setIsProductModalOpen(true);
+                            }} style={actionBtnStyle}>
                                 <i className="fa-solid fa-plus"></i> Add New Product
                             </button>
                         </div>
@@ -477,8 +533,8 @@ export default function AdminDashboard() {
                                 <thead>
                                     <tr>
                                         <th style={thStyle}>Image</th>
-                                        <th style={thStyle}>Product Name</th>
-                                        <th style={thStyle}>Category</th>
+                                        <th style={thStyle}>Product Details</th>
+                                        <th style={thStyle}>Brand/Material</th>
                                         <th style={thStyle}>Price (LKR)</th>
                                         <th style={thStyle}>Stock</th>
                                         <th style={thStyle}>Actions</th>
@@ -488,15 +544,19 @@ export default function AdminDashboard() {
                                     {products.map(p => (
                                         <tr key={p.id} style={trStyle}>
                                             <td style={tdStyle}>
-                                                <img src={p.image_url || '/assets/img/3logo.webp'} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' }} />
+                                                <img src={JSON.parse(p.images || '[]')[0] || '/assets/img/3logo.webp'} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' }} />
                                             </td>
                                             <td style={tdStyle}>
                                                 <div style={{ fontWeight: 'bold' }}>{p.name}</div>
-                                                <div style={{ fontSize: '0.8em', color: '#888', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.description}</div>
+                                                <div style={{ fontSize: '0.8em', color: '#ff9800' }}>{p.category}</div>
+                                                <div style={{ fontSize: '0.8em', color: '#888', maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.description}</div>
                                             </td>
-                                            <td style={tdStyle}>{p.category}</td>
                                             <td style={tdStyle}>
-                                                <div>LKR {p.price.toLocaleString()}</div>
+                                                <div>{p.brand_name || 'N/A'}</div>
+                                                <div style={{ fontSize: '0.8em', color: '#888' }}>{p.material || 'N/A'}</div>
+                                            </td>
+                                            <td style={tdStyle}>
+                                                <div style={{ fontWeight: 'bold' }}>LKR {p.price.toLocaleString()}</div>
                                                 {p.original_price > 0 && <div style={{ fontSize: '0.8em', textDecoration: 'line-through', color: '#ff4c4c' }}>LKR {p.original_price.toLocaleString()}</div>}
                                             </td>
                                             <td style={tdStyle}>
@@ -526,42 +586,22 @@ export default function AdminDashboard() {
             {/* Product Modal */}
             {isProductModalOpen && (
                 <div style={modalOverlayStyle}>
-                    <div style={{ ...modalContentStyle, height: 'auto', maxHeight: '90vh' }}>
+                    <div style={{ ...modalContentStyle, maxWidth: '800px', height: 'auto', maxHeight: '90vh' }}>
                         <div style={modalHeaderStyle}>
                             <h4 style={{ margin: 0 }}>{editingProduct ? 'Edit Product' : 'Add New Product'}</h4>
                             <button onClick={() => setIsProductModalOpen(false)} style={closeBtnStyle}>×</button>
                         </div>
-                        <form onSubmit={handleSaveProduct} style={{ padding: '20px', overflowY: 'auto' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                        <form onSubmit={handleSaveProduct} style={{ padding: '30px', overflowY: 'auto' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px' }}>
+                                {/* Basic Info */}
                                 <div style={{ gridColumn: 'span 2' }}>
+                                    <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px' }}>Basic Information</h5>
+                                </div>
+                                <div style={{ gridColumn: 'span 1' }}>
                                     <label style={labelStyle}>Product Name</label>
                                     <input
                                         type="text" required value={productForm.name}
                                         onChange={e => setProductForm({ ...productForm, name: e.target.value })}
-                                        style={{ ...inputStyle, width: '100%' }}
-                                    />
-                                </div>
-                                <div style={{ gridColumn: 'span 2' }}>
-                                    <label style={labelStyle}>Description</label>
-                                    <textarea
-                                        value={productForm.description}
-                                        onChange={e => setProductForm({ ...productForm, description: e.target.value })}
-                                        style={{ ...inputStyle, width: '100%' }} rows={3}
-                                    />
-                                </div>
-                                <div>
-                                    <label style={labelStyle}>Price (LKR)</label>
-                                    <input
-                                        type="number" required value={productForm.price}
-                                        onChange={e => setProductForm({ ...productForm, price: parseFloat(e.target.value) })}
-                                        style={{ ...inputStyle, width: '100%' }}
-                                    />
-                                </div>
-                                <div>
-                                    <label style={labelStyle}>Original Price (Optional)</label>
-                                    <input
-                                        type="number" value={productForm.original_price}
-                                        onChange={e => setProductForm({ ...productForm, original_price: parseFloat(e.target.value) })}
                                         style={{ ...inputStyle, width: '100%' }}
                                     />
                                 </div>
@@ -579,6 +619,32 @@ export default function AdminDashboard() {
                                         <option>Custom Prints</option>
                                     </select>
                                 </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Description</label>
+                                    <textarea
+                                        value={productForm.description}
+                                        onChange={e => setProductForm({ ...productForm, description: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }} rows={3}
+                                    />
+                                </div>
+
+                                {/* Pricing & Stock */}
+                                <div>
+                                    <label style={labelStyle}>Price (LKR)</label>
+                                    <input
+                                        type="number" required value={productForm.price}
+                                        onChange={e => setProductForm({ ...productForm, price: parseFloat(e.target.value) })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Original Price (Optional)</label>
+                                    <input
+                                        type="number" value={productForm.original_price}
+                                        onChange={e => setProductForm({ ...productForm, original_price: parseFloat(e.target.value) })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
                                 <div>
                                     <label style={labelStyle}>Stock Status</label>
                                     <select
@@ -588,20 +654,140 @@ export default function AdminDashboard() {
                                     >
                                         <option>In Stock</option>
                                         <option>Out of Stock</option>
+                                        <option>Pre-Order</option>
                                     </select>
                                 </div>
-                                <div style={{ gridColumn: 'span 2' }}>
-                                    <label style={labelStyle}>Image URL</label>
+                                <div>
+                                    <label style={labelStyle}>Labels (SEO - comma separated)</label>
                                     <input
-                                        type="text" required value={productForm.image_url}
-                                        onChange={e => setProductForm({ ...productForm, image_url: e.target.value })}
+                                        type="text" value={productForm.labels}
+                                        onChange={e => setProductForm({ ...productForm, labels: e.target.value })}
                                         style={{ ...inputStyle, width: '100%' }}
-                                        placeholder="https://..."
+                                        placeholder="3d labs, printing, creality, etc."
                                     />
                                 </div>
+
+                                {/* Product Specifications */}
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '10px' }}>Specifications</h5>
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Brand Name</label>
+                                    <input
+                                        type="text" value={productForm.brand_name}
+                                        onChange={e => setProductForm({ ...productForm, brand_name: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Material</label>
+                                    <input
+                                        type="text" value={productForm.material}
+                                        onChange={e => setProductForm({ ...productForm, material: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Warranty Information</label>
+                                    <input
+                                        type="text" value={productForm.warranty}
+                                        onChange={e => setProductForm({ ...productForm, warranty: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Shipping & Delivery</label>
+                                    <input
+                                        type="text" value={productForm.shipping_delivery}
+                                        onChange={e => setProductForm({ ...productForm, shipping_delivery: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
+
+                                {/* Images */}
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '10px' }}>Product Images (Max 10)</h5>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '15px' }}>
+                                        {productForm.images.map((img: string, i: number) => (
+                                            <div key={i} style={{ border: '1px solid #333', borderRadius: '8px', padding: '5px', backgroundColor: '#050505', position: 'relative' }}>
+                                                {img ? (
+                                                    <img src={img} alt="Preview" style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
+                                                ) : (
+                                                    <div style={{ width: '100%', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#333' }}>
+                                                        <i className="fa-solid fa-image fa-2x"></i>
+                                                    </div>
+                                                )}
+                                                <input
+                                                    type="text"
+                                                    placeholder="URL"
+                                                    value={img}
+                                                    onChange={(e) => updateProductImage(i, e.target.value)}
+                                                    style={{ width: '100%', fontSize: '10px', background: 'transparent', border: 'none', color: '#888', marginTop: '5px' }}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Variants */}
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '10px' }}>
+                                        <h5 style={{ color: '#ffa415', margin: 0 }}>Product Variants</h5>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <label style={{ fontSize: '12px', color: '#bbb', cursor: 'pointer' }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={productForm.has_variants}
+                                                    onChange={e => setProductForm({ ...productForm, has_variants: e.target.checked })}
+                                                    style={{ marginRight: '8px' }}
+                                                />
+                                                Enable Variants
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {productForm.has_variants && (
+                                        <div style={{ backgroundColor: '#111', padding: '15px', borderRadius: '12px' }}>
+                                            {productForm.variants.map((v: any, idx: number) => (
+                                                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.5fr 1.5fr 40px', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                                                    <input
+                                                        placeholder="Name (e.g. Red, XL, 500g)"
+                                                        value={v.name} onChange={e => updateVariant(idx, 'name', e.target.value)}
+                                                        style={inlineInputStyle}
+                                                    />
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                                                        <input
+                                                            type="color" value={v.color}
+                                                            onChange={e => updateVariant(idx, 'color', e.target.value)}
+                                                            style={{ padding: 0, width: '25px', height: '25px', border: 'none', background: 'none', cursor: 'pointer' }}
+                                                        />
+                                                    </div>
+                                                    <input
+                                                        type="number" placeholder="Price"
+                                                        value={v.price} onChange={e => updateVariant(idx, 'price', parseFloat(e.target.value))}
+                                                        style={inlineInputStyle}
+                                                    />
+                                                    <select
+                                                        value={v.stock} onChange={e => updateVariant(idx, 'stock', e.target.value)}
+                                                        style={inlineInputStyle}
+                                                    >
+                                                        <option>In Stock</option>
+                                                        <option>Out of Stock</option>
+                                                    </select>
+                                                    <button onClick={() => removeVariant(idx)} style={{ color: '#ff4c4c', background: 'none', border: 'none', cursor: 'pointer' }}>
+                                                        <i className="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button onClick={addVariant} type="button" style={{ ...actionBtnStyle, marginTop: '10px', padding: '8px 15px', backgroundColor: '#333', color: '#fff' }}>
+                                                <i className="fa-solid fa-plus"></i> Add Variant
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                            <button type="submit" disabled={loading} style={{ ...saveBtnStyle, width: '100%', marginTop: '30px', padding: '12px' }}>
-                                {loading ? 'Saving...' : 'Save Product'}
+                            <button type="submit" disabled={loading} style={{ ...saveBtnStyle, width: '100%', marginTop: '30px', padding: '15px', fontSize: '16px' }}>
+                                {loading ? 'Saving Product...' : 'Confirm & Save Product'}
                             </button>
                         </form>
                     </div>

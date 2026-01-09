@@ -1,0 +1,127 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { getRequestContext } from '@cloudflare/next-on-pages';
+
+export const runtime = 'edge';
+
+export async function POST(request: NextRequest) {
+    const { env } = getRequestContext();
+    const db = (env as any).DB;
+    const data = await request.json();
+
+    // 1. Admin Login
+    if (data.action === 'login') {
+        if (data.password === 'admin123') {
+            return NextResponse.json({ success: true, token: 'admin-access-token' });
+        }
+        return NextResponse.json({ success: false }, { status: 401 });
+    }
+
+    // 2. Verify Admin Token
+    if (data.token !== 'admin-access-token') {
+        return NextResponse.json("Unauthorized", { status: 401 });
+    }
+
+    // 3. Get All Clients
+    if (data.action === 'get_clients') {
+        const { results } = await db.prepare("SELECT * FROM clients ORDER BY id DESC").all();
+        return NextResponse.json(results);
+    }
+
+    // 4. Get All Quotes
+    if (data.action === 'get_quotes') {
+        const { results } = await db.prepare(`
+            SELECT quotes.*, clients.name as client_name, clients.email as client_email, clients.phone as client_phone 
+            FROM quotes 
+            LEFT JOIN clients ON quotes.client_id = clients.id 
+            ORDER BY quotes.id DESC
+        `).all();
+        return NextResponse.json(results);
+    }
+
+    // 5. Update Quote Status
+    if (data.action === 'update_status') {
+        const current: any = await db.prepare("SELECT * FROM quotes WHERE id = ?").bind(data.id).first();
+
+        let changes = [];
+        if (current.status_order !== data.order) changes.push(`Order Status: ${data.order}`);
+        if (current.status_payment !== data.payment) changes.push(`Payment: ${data.payment}`);
+        if (current.status_delivery !== data.delivery) changes.push(`Delivery: ${data.delivery}`);
+
+        if (parseFloat(current.amount_paid) !== parseFloat(data.paid)) {
+            changes.push(`Paid Amount: ${data.paid}`);
+        }
+
+        if (current.cost !== data.cost) {
+            changes.push(`Total Price: ${data.cost}`);
+            try {
+                const oldFiles = JSON.parse(current.file_details || '[]');
+                const newFiles = JSON.parse(data.file_details || '[]');
+
+                if (oldFiles.length === newFiles.length) {
+                    for (let i = 0; i < oldFiles.length; i++) {
+                        const oldPrice = parseFloat(oldFiles[i].price || 0);
+                        const newPrice = parseFloat(newFiles[i].price || 0);
+                        if (oldPrice !== newPrice) {
+                            changes.push(`File "${oldFiles[i].file}" price changed: ${oldPrice} -> ${newPrice}`);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Error comparing files", e);
+            }
+        }
+
+        await db.prepare(
+            "UPDATE quotes SET status_order = ?, status_payment = ?, status_delivery = ?, amount_paid = ?, cost = ?, file_details = ? WHERE id = ?"
+        ).bind(data.order, data.payment, data.delivery, data.paid, data.cost, data.file_details, data.id).run();
+
+        if (changes.length > 0) {
+            try {
+                const msg = `Order #${data.id} Update: ${changes.join(', ')}`;
+                await db.prepare("INSERT INTO notifications (order_id, message) VALUES (?, ?)").bind(data.id, msg).run();
+                await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)").bind("UPDATE_ORDER", msg).run();
+            } catch (e) {
+                console.error("Failed to create notification/log", e);
+            }
+        }
+
+        return NextResponse.json({ success: true });
+    }
+
+    // 6. Get Notifications
+    if (data.action === 'get_notifications') {
+        const { results } = await db.prepare("SELECT * FROM notifications ORDER BY created_at DESC LIMIT 50").all();
+        return NextResponse.json(results);
+    }
+
+    // 7. Get Messages
+    if (data.action === 'get_messages') {
+        const { results } = await db.prepare(
+            "SELECT * FROM messages WHERE client_id = ? ORDER BY created_at ASC"
+        ).bind(data.client_id).all();
+        return NextResponse.json(results);
+    }
+
+    // 8. Send Message
+    if (data.action === 'send_message') {
+        await db.prepare(
+            "INSERT INTO messages (client_id, sender, message) VALUES (?, ?, ?)"
+        ).bind(data.client_id, data.sender, data.message).run();
+
+        if (data.sender === 'admin') {
+            await db.prepare(
+                "INSERT INTO admin_logs (action_type, description) VALUES (?, ?)"
+            ).bind("SEND_MESSAGE", `Admin sent message to Client #${data.client_id}`).run();
+        }
+
+        return NextResponse.json({ success: true });
+    }
+
+    // 9. Get Admin Logs
+    if (data.action === 'get_logs') {
+        const { results } = await db.prepare("SELECT * FROM admin_logs ORDER BY id DESC LIMIT 100").all();
+        return NextResponse.json(results);
+    }
+
+    return NextResponse.json("Invalid Action", { status: 400 });
+}

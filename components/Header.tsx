@@ -18,7 +18,7 @@ export default function Header() {
     }
   }, []);
 
-  if (pathname === '/login') return null;
+  if (pathname === '/login' || pathname === '/admin') return null;
 
   const isActive = (path: string) => {
     if (path === '/' && pathname !== '/') return false;

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 export default function Footer() {
     const pathname = usePathname();
 
-    if (pathname === '/login') return null;
+    if (pathname === '/login' || pathname === '/admin') return null;
 
     return (
         <footer className="cs_fooer cs_bg_filed" style={{ backgroundImage: "url('/assets/img/footer.webp')" }}>

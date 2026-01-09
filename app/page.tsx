@@ -2,6 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import HeroViewer from '@/components/HeroViewer';
 
+export const runtime = 'edge';
+
 export default function Home() {
   return (
     <>

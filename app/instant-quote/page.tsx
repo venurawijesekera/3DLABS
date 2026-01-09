@@ -1,15 +1,18 @@
 import type { Metadata } from 'next';
+
+export const runtime = 'edge';
+
 import InstantQuoteClient from './InstantQuoteClient';
 
 export const metadata: Metadata = {
-    title: '3D LABS - Instant Quote',
+  title: '3D LABS - Instant Quote',
 };
 
 export default function InstantQuotePage() {
-    return (
-        <>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-            <style>{`
+  return (
+    <>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+      <style>{`
          /* --- Sidebar --- */
     .iq_layout {
       display: grid;
@@ -254,16 +257,16 @@ export default function InstantQuotePage() {
     }
       `}</style>
 
-            <div className="cs_height_90 cs_height_lg_80"></div>
+      <div className="cs_height_90 cs_height_lg_80"></div>
 
-            <div className="container py-5">
-                <div className="text-center mb-5">
-                    <p className="cs_accent_color cs_fs_21 wow fadeInLeft">Get Instant Quote...</p>
-                    <h2 className="cs_section_title cs_fs_68">Instant 3D Quote</h2>
-                </div>
+      <div className="container py-5">
+        <div className="text-center mb-5">
+          <p className="cs_accent_color cs_fs_21 wow fadeInLeft">Get Instant Quote...</p>
+          <h2 className="cs_section_title cs_fs_68">Instant 3D Quote</h2>
+        </div>
 
-                <InstantQuoteClient />
-            </div>
-        </>
-    );
+        <InstantQuoteClient />
+      </div>
+    </>
+  );
 }

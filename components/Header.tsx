@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react';
 export default function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<{ name: string } | null>(null);
+  const [isSticky, setIsSticky] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
 
   useEffect(() => {
     // Auth logic
@@ -16,7 +19,32 @@ export default function Header() {
         setUser(client);
       } catch (e) { console.error(e); }
     }
-  }, []);
+
+    const handleScroll = () => {
+      const windowTop = window.scrollY;
+      const headerHeight = 120; // Approximate header height + cushion
+
+      if (windowTop >= headerHeight) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+        setIsVisible(false);
+      }
+
+      if (windowTop >= headerHeight) {
+        if (windowTop < lastScrollTop) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+      }
+
+      setLastScrollTop(windowTop);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollTop]);
 
   if (pathname === '/login' || pathname === '/admin') return null;
 
@@ -28,7 +56,7 @@ export default function Header() {
   const activeStyle = { color: '#ffa415' };
 
   return (
-    <header className="cs_site_header cs_style_1 cs_sticky_header cs_primary_color">
+    <header className={`cs_site_header cs_style_1 cs_sticky_header cs_primary_color ${isSticky ? 'cs_gescout_sticky' : ''} ${isVisible ? 'cs_gescout_show' : ''}`}>
       <div className="cs_main_header">
         <div className="container">
           <div className="cs_main_header_in">

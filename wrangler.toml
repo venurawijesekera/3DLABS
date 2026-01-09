@@ -5,4 +5,4 @@ compatibility_flags = [ "nodejs_compat" ]
 [[d1_databases]]
 binding = "DB"
 database_name = "3dlabs-db"
-database_id = "your-id-here"
+database_id = "83ef0c1e-ff50-4692-9361-064063243a0f"

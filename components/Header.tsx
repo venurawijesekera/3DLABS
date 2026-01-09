@@ -1,14 +1,14 @@
 "use client";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<{ name: string } | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [lastScrollTop, setLastScrollTop] = useState(0);
+  const lastScrollTop = useRef(0);
 
   useEffect(() => {
     // Auth logic
@@ -32,19 +32,19 @@ export default function Header() {
       }
 
       if (windowTop >= headerHeight) {
-        if (windowTop < lastScrollTop) {
+        if (windowTop < lastScrollTop.current) {
           setIsVisible(true);
         } else {
           setIsVisible(false);
         }
       }
 
-      setLastScrollTop(windowTop);
+      lastScrollTop.current = windowTop;
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollTop]);
+  }, []);
 
   if (pathname === '/login' || pathname === '/admin') return null;
 

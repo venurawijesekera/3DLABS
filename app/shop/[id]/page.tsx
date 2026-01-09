@@ -77,13 +77,12 @@ export default function ProductDetailPage() {
             <Header />
 
             <main style={containerStyle}>
-                {/* Breadcrumbs */}
                 <div style={breadcrumbsStyle}>
                     <Link href="/">Home</Link> / <Link href="/shop">Shop</Link> / <span>{product.name}</span>
                 </div>
 
                 <div style={gridStyle}>
-                    {/* Left: Image Gallery */}
+                    {/* Left Column: Images */}
                     <div style={gallerySectionStyle}>
                         <div style={mainImageContainerStyle}>
                             <img src={mainImage} alt={product.name} style={mainImageStyle} />
@@ -95,111 +94,97 @@ export default function ProductDetailPage() {
                                     onClick={() => setMainImage(img)}
                                     style={{
                                         ...thumbnailStyle,
-                                        borderColor: mainImage === img ? '#ffa415' : 'transparent'
+                                        borderColor: mainImage === img ? '#ffa415' : 'transparent',
+                                        opacity: mainImage === img ? 1 : 0.6
                                     }}
                                 >
                                     <img src={img} alt={`${product.name} thumbnail ${i}`} style={thumbImgStyle} />
                                 </div>
                             ))}
                         </div>
+
+                        {/* Description Card (Matches Nike style) */}
+                        <div style={cardStyle}>
+                            <h4 style={cardHeaderStyle}>Description <i className="fa-solid fa-chevron-up" style={{ fontSize: '12px' }}></i></h4>
+                            <p style={cardBodyStyle}>{product.description}</p>
+                        </div>
+
+                        <div style={cardStyle}>
+                            <h4 style={cardHeaderStyle}>Shipping <i className="fa-solid fa-chevron-down" style={{ fontSize: '12px' }}></i></h4>
+                        </div>
                     </div>
 
-                    {/* Right: Product Info */}
+                    {/* Right Column: Buying Options */}
                     <div style={infoSectionStyle}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                            <span style={categoryBadgeStyle}>{product.category}</span>
-                            <div style={ratingStyle}>
-                                <i className="fa-solid fa-star"></i>
-                                <span>{product.rating || '5.0'}</span>
-                                <span style={{ color: '#555', marginLeft: '5px' }}>(42 Reviews)</span>
+                        <div style={{ ...cardStyle, padding: '30px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                                <h1 style={{ ...titleStyle, margin: 0 }}>{product.name}</h1>
+                                <i className="fa-regular fa-heart" style={{ fontSize: '24px', color: '#888', cursor: 'pointer' }}></i>
                             </div>
-                        </div>
 
-                        <h1 style={titleStyle}>{product.name}</h1>
-
-                        <div style={specsRowStyle}>
-                            {product.brand_name && (
-                                <div style={specItemStyle}>
-                                    <span style={specLabelStyle}>Brand</span>
-                                    <span style={specValueStyle}>{product.brand_name}</span>
-                                </div>
-                            )}
-                            {product.material && (
-                                <div style={specItemStyle}>
-                                    <span style={specLabelStyle}>Material</span>
-                                    <span style={specValueStyle}>{product.material}</span>
-                                </div>
-                            )}
-                        </div>
-
-                        <div style={priceContainerStyle}>
-                            <div style={priceSectionStyle}>
-                                <span style={priceLabelStyle}>Price</span>
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '15px' }}>
-                                    <span style={priceStyle}>LKR {currentPrice.toLocaleString()}</span>
-                                    {product.original_price > currentPrice && (
-                                        <span style={originalPriceStyle}>LKR {product.original_price.toLocaleString()}</span>
-                                    )}
-                                </div>
-                            </div>
-                            <div style={stockStatusStyle(currentStock)}>
-                                {currentStock === 'Out of Stock' ? 'Unavailable' : 'In Stock'}
-                            </div>
-                        </div>
-
-                        {/* Variants Selector */}
-                        {product.has_variants === 1 && variants.length > 0 && (
-                            <div style={variantsContainerStyle}>
-                                <h4 style={sectionTitleStyle}>Choose Variant</h4>
-                                <div style={variantsGridStyle}>
-                                    {variants.map((v: any, i: number) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => setSelectedVariant(v)}
-                                            style={variantButtonStyle(selectedVariant?.name === v.name)}
-                                        >
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                {v.color && (
-                                                    <span style={{
-                                                        width: '12px', height: '12px', borderRadius: '50%',
-                                                        backgroundColor: v.color, border: '1px solid rgba(255,255,255,0.2)'
-                                                    }} />
-                                                )}
-                                                {v.name}
-                                            </div>
-                                            <span style={{ fontSize: '12px', opacity: 0.7 }}>LKR {v.price.toLocaleString()}</span>
-                                        </button>
+                            <div style={ratingRowStyle}>
+                                <div style={ratingStarsStyle}>
+                                    {[1, 2, 3, 4, 5].map(s => (
+                                        <i key={s} className="fa-solid fa-star" style={{ color: '#ffa415' }}></i>
                                     ))}
                                 </div>
+                                <span style={{ color: '#888', fontSize: '14px' }}>4.9 (42) New Reviews</span>
                             </div>
-                        )}
 
-                        <div style={descriptionContainerStyle}>
-                            <h4 style={sectionTitleStyle}>Description</h4>
-                            <p style={descriptionStyle}>{product.description}</p>
-                        </div>
-
-                        <div style={buySectionStyle}>
-                            <button onClick={handleBuy} style={buyBtnStyle}>
-                                <i className="fa-brands fa-whatsapp" style={{ fontSize: '20px' }}></i>
-                                Buy on WhatsApp
-                            </button>
-                        </div>
-
-                        {/* Delivery & Warranty Tabs */}
-                        <div style={policySectionStyle}>
-                            <div style={policyItemStyle}>
-                                <i className="fa-solid fa-truck-fast" style={policyIconStyle}></i>
-                                <div>
-                                    <div style={policyTitleStyle}>Shipping & Delivery</div>
-                                    <div style={policyTextStyle}>{product.shipping_delivery || 'Standard Delivery within 2-3 business days.'}</div>
+                            {/* Color Selection Placeholder */}
+                            <div style={selectionGroupStyle}>
+                                <div style={selectionLabelStyle}>Material / Brand</div>
+                                <div style={{ display: 'flex', gap: '10px' }}>
+                                    <div style={pillStyle}>{product.material || 'PLA'}</div>
+                                    <div style={pillStyle}>{product.brand_name || '3D Labs'}</div>
                                 </div>
                             </div>
-                            <div style={policyItemStyle}>
-                                <i className="fa-solid fa-shield-check" style={policyIconStyle}></i>
-                                <div>
-                                    <div style={policyTitleStyle}>Warranty Information</div>
-                                    <div style={policyTextStyle}>{product.warranty || 'No explicit warranty provided.'}</div>
+
+                            {/* Variants Selection */}
+                            {product.has_variants === 1 && variants.length > 0 && (
+                                <div style={selectionGroupStyle}>
+                                    <div style={selectionLabelStyle}>Choose Variant</div>
+                                    <div style={variantsGridStyle}>
+                                        {variants.map((v: any, i: number) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => setSelectedVariant(v)}
+                                                style={variantButtonStyle(selectedVariant?.name === v.name)}
+                                            >
+                                                {v.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Price & Buy Section (Matches Nike style) */}
+                            <div style={priceBuyCardStyle}>
+                                <div style={{ fontSize: '28px', fontWeight: 'bold' }}>
+                                    LKR {currentPrice.toLocaleString()}
+                                </div>
+                                <button onClick={handleBuy} style={buyNowBtnStyle}>
+                                    Buy Now <i className="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Additional Info Cards */}
+                        <div style={{ ...cardStyle, marginTop: '20px' }}>
+                            <h4 style={cardHeaderStyle}>Reviews (42) <span style={{ marginLeft: 'auto', fontWeight: 'normal', fontSize: '13px', color: '#ffa415', cursor: 'pointer' }}>See more</span></h4>
+                            <div style={{ padding: '20px' }}>
+                                <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
+                                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#222' }} />
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                                            <span style={{ fontWeight: 'bold' }}>Alexander S.</span>
+                                            <span style={{ fontSize: '12px', color: '#555' }}>10/01/2026</span>
+                                        </div>
+                                        <div style={{ color: '#ffa415', fontSize: '10px', marginBottom: '5px' }}>
+                                            <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
+                                        </div>
+                                        <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>This is exactly what I was looking for. The quality is amazing!</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -263,25 +248,138 @@ const breadcrumbsStyle: React.CSSProperties = {
     marginBottom: '30px',
 };
 
+const relatedSectionStyle: React.CSSProperties = {
+    marginTop: '80px',
+    paddingTop: '60px',
+    borderTop: '1px solid #eee',
+};
+
+const cardStyle: React.CSSProperties = {
+    backgroundColor: '#fff',
+    borderRadius: '24px',
+    padding: '20px',
+    color: '#000',
+    border: '1px solid #eee',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+    marginBottom: '20px',
+};
+
+const cardHeaderStyle: React.CSSProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontWeight: 'bold',
+    fontSize: '18px',
+    margin: 0,
+    borderBottom: '1px solid #f0f0f0',
+    paddingBottom: '15px',
+};
+
+const cardBodyStyle: React.CSSProperties = {
+    paddingTop: '15px',
+    fontSize: '14px',
+    color: '#666',
+    lineHeight: '1.6',
+    margin: 0,
+};
+
+const titleStyle: React.CSSProperties = {
+    fontSize: '32px',
+    fontWeight: '700',
+    color: '#000',
+    lineHeight: '1.2',
+};
+
+const ratingRowStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    marginTop: '10px',
+};
+
+const ratingStarsStyle: React.CSSProperties = {
+    display: 'flex',
+    gap: '2px',
+    fontSize: '12px',
+};
+
+const selectionGroupStyle: React.CSSProperties = {
+    marginTop: '25px',
+};
+
+const selectionLabelStyle: React.CSSProperties = {
+    fontSize: '12px',
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: '10px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+};
+
+const pillStyle: React.CSSProperties = {
+    padding: '8px 16px',
+    backgroundColor: '#f5f5f5',
+    borderRadius: '30px',
+    fontSize: '14px',
+    color: '#333',
+    fontWeight: '500',
+};
+
+const priceBuyCardStyle: React.CSSProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: '40px',
+    padding: '10px',
+    backgroundColor: '#000',
+    borderRadius: '40px',
+    color: '#fff',
+};
+
+const buyNowBtnStyle: React.CSSProperties = {
+    padding: '12px 25px',
+    backgroundColor: '#fff',
+    color: '#000',
+    border: 'none',
+    borderRadius: '30px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+};
+
+const variantButtonStyle = (selected: boolean): React.CSSProperties => ({
+    padding: '10px 20px',
+    borderRadius: '30px',
+    backgroundColor: selected ? '#000' : '#f5f5f5',
+    color: selected ? '#fff' : '#000',
+    border: 'none',
+    fontWeight: '500',
+    fontSize: '14px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+});
+
 const gridStyle: React.CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 450px)',
-    gap: '60px',
+    gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 480px)',
+    gap: '30px',
 };
 
 const gallerySectionStyle: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: '30px',
 };
 
 const mainImageContainerStyle: React.CSSProperties = {
     width: '100%',
-    aspectRatio: '1/1',
+    aspectRatio: '4/5',
     borderRadius: '24px',
     overflow: 'hidden',
-    backgroundColor: '#050505',
-    border: '1px solid rgba(255,255,255,0.05)',
+    backgroundColor: '#f5f5f5',
 };
 
 const mainImageStyle: React.CSSProperties = {
@@ -293,17 +391,17 @@ const mainImageStyle: React.CSSProperties = {
 const thumbnailsGridStyle: React.CSSProperties = {
     display: 'grid',
     gridTemplateColumns: 'repeat(5, 1fr)',
-    gap: '12px',
+    gap: '15px',
 };
 
 const thumbnailStyle: React.CSSProperties = {
     aspectRatio: '1/1',
-    borderRadius: '12px',
+    borderRadius: '16px',
     overflow: 'hidden',
     cursor: 'pointer',
     border: '2px solid transparent',
     transition: 'all 0.2s ease',
-    backgroundColor: '#050505',
+    backgroundColor: '#f5f5f5',
 };
 
 const thumbImgStyle: React.CSSProperties = {
@@ -317,197 +415,16 @@ const infoSectionStyle: React.CSSProperties = {
     flexDirection: 'column',
 };
 
-const categoryBadgeStyle: React.CSSProperties = {
-    fontSize: '12px',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    color: '#ffa415',
-    fontWeight: 'bold',
-};
-
-const ratingStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    fontSize: '14px',
-    color: '#ffa415',
-};
-
-const titleStyle: React.CSSProperties = {
-    fontSize: '42px',
-    fontWeight: '800',
-    margin: '10px 0 20px 0',
-    lineHeight: '1.2',
-    color: '#fff',
-};
-
-const specsRowStyle: React.CSSProperties = {
-    display: 'flex',
-    gap: '20px',
-    marginBottom: '30px',
-};
-
-const specItemStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-};
-
-const specLabelStyle: React.CSSProperties = {
-    fontSize: '11px',
-    textTransform: 'uppercase',
-    color: '#555',
-    fontWeight: 'bold',
-};
-
-const specValueStyle: React.CSSProperties = {
-    fontSize: '16px',
-    color: '#fff',
-};
-
-const priceContainerStyle: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    padding: '25px',
-    borderRadius: '20px',
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    border: '1px solid rgba(255,255,255,0.05)',
-    marginBottom: '30px',
-};
-
-const priceSectionStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '5px',
-};
-
-const priceLabelStyle: React.CSSProperties = {
-    fontSize: '12px',
-    color: '#888',
-};
-
-const priceStyle: React.CSSProperties = {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    color: '#ffa415',
-};
-
-const originalPriceStyle: React.CSSProperties = {
-    fontSize: '18px',
-    color: '#555',
-    textDecoration: 'line-through',
-};
-
-const stockStatusStyle = (status: string): React.CSSProperties => ({
-    padding: '6px 14px',
-    borderRadius: '30px',
-    fontSize: '12px',
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    backgroundColor: status === 'Out of Stock' ? 'rgba(255,76,76,0.1)' : 'rgba(76,255,166,0.1)',
-    color: status === 'Out of Stock' ? '#ff4c4c' : '#4cffa6',
-    border: `1px solid ${status === 'Out of Stock' ? 'rgba(255,76,76,0.2)' : 'rgba(76,255,166,0.2)'}`,
-});
-
-const sectionTitleStyle: React.CSSProperties = {
-    fontSize: '16px',
-    fontWeight: 'bold',
-    marginBottom: '15px',
-    color: '#fff',
-};
-
-const variantsContainerStyle: React.CSSProperties = {
-    marginBottom: '30px',
-};
-
 const variantsGridStyle: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
+    display: 'flex',
+    flexWrap: 'wrap',
     gap: '10px',
 };
 
-const variantButtonStyle = (selected: boolean): React.CSSProperties => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    gap: '5px',
-    padding: '12px 15px',
-    borderRadius: '12px',
-    backgroundColor: selected ? 'rgba(255,164,21,0.1)' : 'rgba(255,255,255,0.02)',
-    border: `1px solid ${selected ? '#ffa415' : 'rgba(255,255,255,0.05)'}`,
-    color: selected ? '#ffa415' : '#888',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    textAlign: 'left',
-});
-
-const descriptionContainerStyle: React.CSSProperties = {
-    marginBottom: '30px',
-};
-
-const descriptionStyle: React.CSSProperties = {
-    fontSize: '15px',
-    color: '#aaa',
-    lineHeight: '1.6',
-};
-
-const buySectionStyle: React.CSSProperties = {
-    marginBottom: '40px',
-};
-
-const buyBtnStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '18px',
-    borderRadius: '16px',
-    backgroundColor: '#ffa415',
-    color: '#000',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    border: 'none',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '12px',
-    transition: 'transform 0.2s ease, background-color 0.2s ease',
-};
-
-const policySectionStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-    paddingTop: '30px',
-    borderTop: '1px solid rgba(255,255,255,0.05)',
-};
-
-const policyItemStyle: React.CSSProperties = {
-    display: 'flex',
-    gap: '15px',
-};
-
-const policyIconStyle: React.CSSProperties = {
-    fontSize: '20px',
-    color: '#ffa415',
-    marginTop: '3px',
-};
-
-const policyTitleStyle: React.CSSProperties = {
-    fontSize: '14px',
-    fontWeight: 'bold',
-    marginBottom: '4px',
-    color: '#fff',
-};
-
-const policyTextStyle: React.CSSProperties = {
-    fontSize: '13px',
-    color: '#777',
-};
-
-const relatedSectionStyle: React.CSSProperties = {
+const relatedContainerStyle: React.CSSProperties = {
     marginTop: '80px',
     paddingTop: '60px',
-    borderTop: '1px solid rgba(255,255,255,0.05)',
+    borderTop: '1px solid #eee',
 };
 
 const relatedGridStyle: React.CSSProperties = {
@@ -517,11 +434,12 @@ const relatedGridStyle: React.CSSProperties = {
 };
 
 const relatedCardStyle: React.CSSProperties = {
-    backgroundColor: 'rgba(255,255,255,0.03)',
+    backgroundColor: '#fff',
     borderRadius: '20px',
     overflow: 'hidden',
-    border: '1px solid rgba(255,255,255,0.05)',
+    border: '1px solid #eee',
     transition: 'transform 0.3s ease',
+    boxShadow: '0 5px 15px rgba(0,0,0,0.02)',
 };
 
 const relatedImgStyle: React.CSSProperties = {
@@ -533,7 +451,7 @@ const relatedImgStyle: React.CSSProperties = {
 const relatedTitleStyle: React.CSSProperties = {
     fontSize: '16px',
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#000',
     margin: '0 0 5px 0',
 };
 

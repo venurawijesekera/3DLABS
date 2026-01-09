@@ -223,6 +223,36 @@ export default function AdminDashboard() {
         setProductForm({ ...productForm, variants: newVars });
     };
 
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files) return;
+
+        const currentImages = [...productForm.images.filter((img: string) => img.trim() !== '')];
+        const remainingSlots = 10 - currentImages.length;
+        const filesToProcess = Array.from(files).slice(0, remainingSlots);
+
+        filesToProcess.forEach(file => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setProductForm((prev: any) => {
+                    const updatedImgs = [...prev.images.filter((img: string) => img.trim() !== ''), base64String];
+                    // Pad back to 10 slots
+                    while (updatedImgs.length < 10) updatedImgs.push('');
+                    return { ...prev, images: updatedImgs };
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const removeImage = (idx: number) => {
+        const newImgs = [...productForm.images];
+        newImgs.splice(idx, 1);
+        newImgs.push(''); // Maintain 10 slots
+        setProductForm({ ...productForm, images: newImgs });
+    };
+
     const updateQuoteStatus = async (quote: any) => {
         try {
             const res = await fetch('/api/admin-data', {
@@ -707,23 +737,45 @@ export default function AdminDashboard() {
                                 {/* Images */}
                                 <div style={{ gridColumn: 'span 2' }}>
                                     <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '10px' }}>Product Images (Max 10)</h5>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '15px' }}>
-                                        {productForm.images.map((img: string, i: number) => (
-                                            <div key={i} style={{ border: '1px solid #333', borderRadius: '8px', padding: '5px', backgroundColor: '#050505', position: 'relative' }}>
-                                                {img ? (
-                                                    <img src={img} alt="Preview" style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
-                                                ) : (
-                                                    <div style={{ width: '100%', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#333' }}>
-                                                        <i className="fa-solid fa-image fa-2x"></i>
-                                                    </div>
-                                                )}
-                                                <input
-                                                    type="text"
-                                                    placeholder="URL"
-                                                    value={img}
-                                                    onChange={(e) => updateProductImage(i, e.target.value)}
-                                                    style={{ width: '100%', fontSize: '10px', background: 'transparent', border: 'none', color: '#888', marginTop: '5px' }}
-                                                />
+
+                                    <div
+                                        style={dropZoneStyle}
+                                        onDragOver={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = '#ffa415'; }}
+                                        onDragLeave={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = '#333'; }}
+                                        onDrop={(e) => {
+                                            e.preventDefault();
+                                            e.currentTarget.style.borderColor = '#333';
+                                            const files = e.dataTransfer.files;
+                                            if (files) {
+                                                const input = document.getElementById('imageInput') as HTMLInputElement;
+                                                const dt = new DataTransfer();
+                                                for (let i = 0; i < files.length; i++) dt.items.add(files[i]);
+                                                input.files = dt.files;
+                                                handleImageUpload({ target: input } as any);
+                                            }
+                                        }}
+                                        onClick={() => document.getElementById('imageInput')?.click()}
+                                    >
+                                        <i className="fa-solid fa-cloud-arrow-up" style={{ fontSize: '30px', marginBottom: '10px', color: '#888' }}></i>
+                                        <div style={{ color: '#888', fontSize: '14px' }}>Drag & Drop images or <span style={{ color: '#ffa415' }}>Browse</span></div>
+                                        <div style={{ color: '#555', fontSize: '11px', marginTop: '5px' }}>Up to 10 images. Recommendation: Square (1:1) ratio.</div>
+                                        <input
+                                            id="imageInput" type="file" multiple accept="image/*"
+                                            onChange={handleImageUpload} style={{ display: 'none' }}
+                                        />
+                                    </div>
+
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '15px', marginTop: '20px' }}>
+                                        {productForm.images.filter((img: string) => img !== '').map((img: string, i: number) => (
+                                            <div key={i} style={{ border: '1px solid #333', borderRadius: '12px', padding: '5px', backgroundColor: '#050505', position: 'relative', overflow: 'hidden' }}>
+                                                <img src={img} alt="Preview" style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px' }} />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeImage(i)}
+                                                    style={removeImgBtnStyle}
+                                                >
+                                                    <i className="fa-solid fa-xmark"></i>
+                                                </button>
                                             </div>
                                         ))}
                                     </div>
@@ -1130,4 +1182,31 @@ const chatInputStyle: React.CSSProperties = {
 const sendBtnStyle: React.CSSProperties = {
     width: '45px', height: '45px', borderRadius: '50%', backgroundColor: '#ffa415', color: '#000',
     border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+};
+
+const dropZoneStyle: React.CSSProperties = {
+    border: '2px dashed #333',
+    borderRadius: '16px',
+    padding: '40px 20px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    backgroundColor: 'rgba(255,255,255,0.02)'
+};
+
+const removeImgBtnStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: '5px',
+    right: '5px',
+    width: '24px',
+    height: '24px',
+    borderRadius: '50%',
+    backgroundColor: 'rgba(255, 76, 76, 0.9)',
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '12px'
 };

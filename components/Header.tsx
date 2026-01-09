@@ -70,7 +70,7 @@ export default function Header() {
             <div className="cs_main_header_right">
               {/* Auth Button */}
               {user ? (
-                <Link href="/profile" id="authBtn" className="cs_btn cs_style_1" style={{ borderColor: "#ffa415", color: "#ffa415" }}>
+                <Link href="/profile" id="authBtn" className="cs_btn cs_style_1" style={{ borderColor: "#ffa415", color: "#000" }}>
                   Hi, {user.name.split(' ')[0].toUpperCase()} <span><i className="fa-solid fa-user"></i></span>
                 </Link>
               ) : (

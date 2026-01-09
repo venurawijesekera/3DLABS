@@ -55,6 +55,9 @@ export default function Header() {
                   <li className={isActive('/blog') ? 'active' : ''}>
                     <Link href="/blog" style={isActive('/blog') ? activeStyle : {}}>BLOG</Link>
                   </li>
+                  <li className={isActive('/shop') ? 'active' : ''}>
+                    <Link href="/shop" style={isActive('/shop') ? activeStyle : {}}>SHOP</Link>
+                  </li>
                   <li className={isActive('/about') ? 'active' : ''}>
                     <Link href="/about" style={isActive('/about') ? activeStyle : {}}>ABOUT</Link>
                   </li>

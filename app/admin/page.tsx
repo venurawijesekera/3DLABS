@@ -7,7 +7,7 @@ export default function AdminDashboard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<'clients' | 'orders' | 'logs'>('orders');
+    const [activeTab, setActiveTab] = useState<'clients' | 'orders' | 'logs' | 'shop'>('orders');
 
     const [clients, setClients] = useState<any[]>([]);
     const [quotes, setQuotes] = useState<any[]>([]);
@@ -19,6 +19,15 @@ export default function AdminDashboard() {
     const [messages, setMessages] = useState<any[]>([]);
     const [messageInput, setMessageInput] = useState('');
     const [isChatOpen, setIsChatOpen] = useState(false);
+
+    // Product State
+    const [products, setProducts] = useState<any[]>([]);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<any>(null);
+    const [productForm, setProductForm] = useState({
+        name: '', description: '', price: 0, original_price: 0,
+        category: 'Accessories', image_url: '', stock_status: 'In Stock'
+    });
 
     useEffect(() => {
         const token = localStorage.getItem('3dlabs_admin_token');
@@ -32,6 +41,7 @@ export default function AdminDashboard() {
         fetchClients();
         fetchQuotes();
         fetchLogs();
+        fetchProducts();
     };
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -97,6 +107,73 @@ export default function AdminDashboard() {
             const data = await res.json();
             setLogs(data);
         } catch (err) { console.error(err); }
+    };
+
+    const fetchProducts = async () => {
+        try {
+            const res = await fetch('/api/admin-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'get_products', token: 'admin-access-token' })
+            });
+            const data = await res.json();
+            setProducts(data);
+        } catch (err) { console.error(err); }
+    };
+
+    const handleSaveProduct = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const action = editingProduct ? 'update_product' : 'add_product';
+            const res = await fetch('/api/admin-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action,
+                    token: 'admin-access-token',
+                    product: editingProduct ? { ...productForm, id: editingProduct.id } : productForm
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setIsProductModalOpen(false);
+                setEditingProduct(null);
+                setProductForm({
+                    name: '', description: '', price: 0, original_price: 0,
+                    category: 'Accessories', image_url: '', stock_status: 'In Stock'
+                });
+                fetchProducts();
+                fetchLogs();
+            }
+        } catch (err) { alert('Failed to save product'); }
+        finally { setLoading(false); }
+    };
+
+    const deleteProduct = async (id: number) => {
+        if (!confirm('Are you sure you want to delete this product?')) return;
+        try {
+            const res = await fetch('/api/admin-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delete_product', token: 'admin-access-token', id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchProducts();
+                fetchLogs();
+            }
+        } catch (err) { console.error(err); }
+    };
+
+    const openEditProduct = (p: any) => {
+        setEditingProduct(p);
+        setProductForm({
+            name: p.name, description: p.description, price: p.price,
+            original_price: p.original_price, category: p.category,
+            image_url: p.image_url, stock_status: p.stock_status
+        });
+        setIsProductModalOpen(true);
     };
 
     const updateQuoteStatus = async (quote: any) => {
@@ -253,6 +330,13 @@ export default function AdminDashboard() {
                     >
                         <i className="fa-solid fa-clock-rotate-left" style={{ marginRight: '8px' }}></i> System Logs
                     </button>
+                    <button
+                        onClick={() => setActiveTab('shop')}
+                        className={activeTab === 'shop' ? 'active-tab' : 'tab'}
+                        style={activeTab === 'shop' ? activeTabStyle : tabStyle}
+                    >
+                        <i className="fa-solid fa-store" style={{ marginRight: '8px' }}></i> Shop Products
+                    </button>
                 </div>
 
                 {/* Content Sections */}
@@ -379,7 +463,150 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                 )}
+
+                {activeTab === 'shop' && (
+                    <div className="cs_card" style={cardStyle}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <h4 style={{ margin: 0 }}>Shop Product Management</h4>
+                            <button onClick={() => { setEditingProduct(null); setIsProductModalOpen(true); }} style={actionBtnStyle}>
+                                <i className="fa-solid fa-plus"></i> Add New Product
+                            </button>
+                        </div>
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={tableStyle}>
+                                <thead>
+                                    <tr>
+                                        <th style={thStyle}>Image</th>
+                                        <th style={thStyle}>Product Name</th>
+                                        <th style={thStyle}>Category</th>
+                                        <th style={thStyle}>Price (LKR)</th>
+                                        <th style={thStyle}>Stock</th>
+                                        <th style={thStyle}>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {products.map(p => (
+                                        <tr key={p.id} style={trStyle}>
+                                            <td style={tdStyle}>
+                                                <img src={p.image_url || '/assets/img/3logo.webp'} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' }} />
+                                            </td>
+                                            <td style={tdStyle}>
+                                                <div style={{ fontWeight: 'bold' }}>{p.name}</div>
+                                                <div style={{ fontSize: '0.8em', color: '#888', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.description}</div>
+                                            </td>
+                                            <td style={tdStyle}>{p.category}</td>
+                                            <td style={tdStyle}>
+                                                <div>LKR {p.price.toLocaleString()}</div>
+                                                {p.original_price > 0 && <div style={{ fontSize: '0.8em', textDecoration: 'line-through', color: '#ff4c4c' }}>LKR {p.original_price.toLocaleString()}</div>}
+                                            </td>
+                                            <td style={tdStyle}>
+                                                <span style={{ color: p.stock_status === 'In Stock' ? '#4caf50' : '#ff4c4c', fontWeight: 'bold' }}>
+                                                    {p.stock_status}
+                                                </span>
+                                            </td>
+                                            <td style={tdStyle}>
+                                                <div style={{ display: 'flex', gap: '10px' }}>
+                                                    <button onClick={() => openEditProduct(p)} style={{ ...saveBtnStyle, padding: '5px 10px', fontSize: '12px' }}>
+                                                        <i className="fa-solid fa-pen"></i>
+                                                    </button>
+                                                    <button onClick={() => deleteProduct(p.id)} style={{ ...saveBtnStyle, borderColor: '#ff4c4c', color: '#ff4c4c', padding: '5px 10px', fontSize: '12px' }}>
+                                                        <i className="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
             </div>
+
+            {/* Product Modal */}
+            {isProductModalOpen && (
+                <div style={modalOverlayStyle}>
+                    <div style={{ ...modalContentStyle, height: 'auto', maxHeight: '90vh' }}>
+                        <div style={modalHeaderStyle}>
+                            <h4 style={{ margin: 0 }}>{editingProduct ? 'Edit Product' : 'Add New Product'}</h4>
+                            <button onClick={() => setIsProductModalOpen(false)} style={closeBtnStyle}>×</button>
+                        </div>
+                        <form onSubmit={handleSaveProduct} style={{ padding: '20px', overflowY: 'auto' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Product Name</label>
+                                    <input
+                                        type="text" required value={productForm.name}
+                                        onChange={e => setProductForm({ ...productForm, name: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Description</label>
+                                    <textarea
+                                        value={productForm.description}
+                                        onChange={e => setProductForm({ ...productForm, description: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }} rows={3}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Price (LKR)</label>
+                                    <input
+                                        type="number" required value={productForm.price}
+                                        onChange={e => setProductForm({ ...productForm, price: parseFloat(e.target.value) })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Original Price (Optional)</label>
+                                    <input
+                                        type="number" value={productForm.original_price}
+                                        onChange={e => setProductForm({ ...productForm, original_price: parseFloat(e.target.value) })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Category</label>
+                                    <select
+                                        value={productForm.category}
+                                        onChange={e => setProductForm({ ...productForm, category: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%', height: '42px' }}
+                                    >
+                                        <option>3D Printer</option>
+                                        <option>Filament</option>
+                                        <option>Resin</option>
+                                        <option>Accessories</option>
+                                        <option>Custom Prints</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style={labelStyle}>Stock Status</label>
+                                    <select
+                                        value={productForm.stock_status}
+                                        onChange={e => setProductForm({ ...productForm, stock_status: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%', height: '42px' }}
+                                    >
+                                        <option>In Stock</option>
+                                        <option>Out of Stock</option>
+                                    </select>
+                                </div>
+                                <div style={{ gridColumn: 'span 2' }}>
+                                    <label style={labelStyle}>Image URL</label>
+                                    <input
+                                        type="text" required value={productForm.image_url}
+                                        onChange={e => setProductForm({ ...productForm, image_url: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }}
+                                        placeholder="https://..."
+                                    />
+                                </div>
+                            </div>
+                            <button type="submit" disabled={loading} style={{ ...saveBtnStyle, width: '100%', marginTop: '30px', padding: '12px' }}>
+                                {loading ? 'Saving...' : 'Save Product'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             {/* Chat Modal */}
             {isChatOpen && (
@@ -640,6 +867,10 @@ const tableStyle: React.CSSProperties = {
 
 const thStyle: React.CSSProperties = {
     textAlign: 'left', padding: '15px', borderBottom: '1px solid #333', color: '#ffa415', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px'
+};
+
+const labelStyle: React.CSSProperties = {
+    display: 'block', fontSize: '11px', color: '#888', textTransform: 'uppercase', marginBottom: '5px'
 };
 
 const tdStyle: React.CSSProperties = {

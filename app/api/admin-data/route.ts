@@ -123,5 +123,47 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(results);
     }
 
+    // 10. Get Products (Shop)
+    if (data.action === 'get_products') {
+        const { results } = await db.prepare("SELECT * FROM products ORDER BY id DESC").all();
+        return NextResponse.json(results);
+    }
+
+    // 11. Add Product
+    if (data.action === 'add_product') {
+        const { name, description, price, original_price, category, image_url, stock_status } = data.product;
+        await db.prepare(`
+            INSERT INTO products (name, description, price, original_price, category, image_url, stock_status) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).bind(name, description, price, original_price, category, image_url, stock_status).run();
+
+        await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
+            .bind("ADD_PRODUCT", `Added new product: ${name}`).run();
+
+        return NextResponse.json({ success: true });
+    }
+
+    // 12. Update Product
+    if (data.action === 'update_product') {
+        const { id, name, description, price, original_price, category, image_url, stock_status } = data.product;
+        await db.prepare(`
+            UPDATE products SET name = ?, description = ?, price = ?, original_price = ?, category = ?, image_url = ?, stock_status = ? 
+            WHERE id = ?
+        `).bind(name, description, price, original_price, category, image_url, stock_status, id).run();
+
+        await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
+            .bind("UPDATE_PRODUCT", `Updated product: ${name}`).run();
+
+        return NextResponse.json({ success: true });
+    }
+
+    // 13. Delete Product
+    if (data.action === 'delete_product') {
+        await db.prepare("DELETE FROM products WHERE id = ?").bind(data.id).run();
+        await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
+            .bind("DELETE_PRODUCT", `Deleted product ID: ${data.id}`).run();
+        return NextResponse.json({ success: true });
+    }
+
     return NextResponse.json("Invalid Action", { status: 400 });
 }

@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     title: m.long_name || m.name,
                     subtitle: m.tag || 'Material',
                     description: m.description_2 || m.short_description,
-                    image: m.image,
+                    image: m.main_image || m.image,
                     progress: mapProgress(properties || {}),
                     specs: mapSpecs(specifications || {}),
                     applications: {

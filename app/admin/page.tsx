@@ -38,7 +38,7 @@ export default function AdminDashboard() {
     const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
     const [editingMaterial, setEditingMaterial] = useState<any>(null);
     const [materialForm, setMaterialForm] = useState<any>({
-        slug: '', name: '', long_name: '', image: '', tag: '',
+        slug: '', name: '', long_name: '', image: '', main_image: '', tag: '',
         short_description: '', description_2: '',
         properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
         specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
@@ -181,7 +181,7 @@ export default function AdminDashboard() {
                 setIsMaterialModalOpen(false);
                 setEditingMaterial(null);
                 setMaterialForm({
-                    slug: '', name: '', long_name: '', image: '', tag: '',
+                    slug: '', name: '', long_name: '', image: '', main_image: '', tag: '',
                     short_description: '', description_2: '',
                     properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
                     specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
     const openEditMaterial = (m: any) => {
         setEditingMaterial(m);
         setMaterialForm({
-            slug: m.slug, name: m.name, long_name: m.long_name, image: m.image, tag: m.tag,
+            slug: m.slug, name: m.name, long_name: m.long_name, image: m.image, main_image: m.main_image, tag: m.tag,
             short_description: m.short_description, description_2: m.description_2,
             properties: JSON.parse(m.properties || '{}'),
             specifications: JSON.parse(m.specifications || '{}'),
@@ -775,7 +775,7 @@ export default function AdminDashboard() {
                             <button onClick={() => {
                                 setEditingMaterial(null);
                                 setMaterialForm({
-                                    slug: '', name: '', long_name: '', image: '', tag: '',
+                                    slug: '', name: '', long_name: '', image: '', main_image: '', tag: '',
                                     short_description: '', description_2: '',
                                     properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
                                     specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
@@ -1095,8 +1095,8 @@ export default function AdminDashboard() {
                                     <label style={labelStyle}>Tag / Title (e.g. Standard Material)</label>
                                     <input type="text" value={materialForm.tag} onChange={e => setMaterialForm({ ...materialForm, tag: e.target.value })} style={{ ...inputStyle, width: '100%' }} />
                                 </div>
-                                <div style={{ gridColumn: 'span 2' }}>
-                                    <label style={labelStyle}>Main Image</label>
+                                <div style={{ gridColumn: 'span 1' }}>
+                                    <label style={labelStyle}>Card Image</label>
                                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                                         {materialForm.image && <img src={materialForm.image} alt="Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '5px' }} />}
                                         <input type="file" onChange={async (e) => {
@@ -1105,7 +1105,20 @@ export default function AdminDashboard() {
                                                 const base64 = await resizeImage(file);
                                                 setMaterialForm({ ...materialForm, image: base64 });
                                             }
-                                        }} style={{ color: '#aaa' }} />
+                                        }} style={{ color: '#aaa', width: '100%' }} />
+                                    </div>
+                                </div>
+                                <div style={{ gridColumn: 'span 1' }}>
+                                    <label style={labelStyle}>Main Image (Detail Page)</label>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        {materialForm.main_image && <img src={materialForm.main_image} alt="Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '5px' }} />}
+                                        <input type="file" onChange={async (e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                const base64 = await resizeImage(file);
+                                                setMaterialForm({ ...materialForm, main_image: base64 });
+                                            }
+                                        }} style={{ color: '#aaa', width: '100%' }} />
                                     </div>
                                 </div>
                                 <div style={{ gridColumn: 'span 2' }}>

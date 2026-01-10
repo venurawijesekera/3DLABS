@@ -189,11 +189,11 @@ export async function POST(request: NextRequest) {
     // 15. Add Material
     if (data.action === 'add_material') {
         try {
-            const { slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications } = data.material;
+            const { slug, name, long_name, image, main_image, tag, short_description, description_2, properties, specifications, applications } = data.material;
             await db.prepare(`
-                INSERT INTO materials (slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `).bind(slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications).run();
+                INSERT INTO materials (slug, name, long_name, image, main_image, tag, short_description, description_2, properties, specifications, applications) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).bind(slug, name, long_name, image, main_image, tag, short_description, description_2, properties, specifications, applications).run();
 
             await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
                 .bind("ADD_MATERIAL", `Added new material: ${name}`).run();
@@ -208,13 +208,13 @@ export async function POST(request: NextRequest) {
     // 16. Update Material
     if (data.action === 'update_material') {
         try {
-            const { id, slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications } = data.material;
+            const { id, slug, name, long_name, image, main_image, tag, short_description, description_2, properties, specifications, applications } = data.material;
             await db.prepare(`
                 UPDATE materials SET 
-                    slug = ?, name = ?, long_name = ?, image = ?, tag = ?, 
+                    slug = ?, name = ?, long_name = ?, image = ?, main_image = ?, tag = ?, 
                     short_description = ?, description_2 = ?, properties = ?, specifications = ?, applications = ?
                 WHERE id = ?
-            `).bind(slug, name, long_name, image, tag, short_description, description_2, properties, specifications, applications, id).run();
+            `).bind(slug, name, long_name, image, main_image, tag, short_description, description_2, properties, specifications, applications, id).run();
 
             await db.prepare("INSERT INTO admin_logs (action_type, description) VALUES (?, ?)")
                 .bind("UPDATE_MATERIAL", `Updated material: ${name}`).run();

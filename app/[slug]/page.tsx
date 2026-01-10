@@ -11,13 +11,13 @@ import ServiceTemplate from '../../components/ServiceTemplate';
 const mapSpecs = (specs: any) => {
     const mapping: any = {
         density: { label: 'Density', icon: '/assets/img/icons/density.svg' },
-        tensile_strength: { label: 'Tensile Strength', icon: '/assets/img/icons/tensile.svg' },
+        tensile_strength: { label: 'Tensile Strength', icon: '/assets/img/icons/tensile-strength.svg' },
         elongation: { label: 'Elongation', icon: '/assets/img/icons/elongation.svg' },
-        flexural_strength: { label: 'Flexural Strength', icon: '/assets/img/icons/flexural.svg' },
+        flexural_strength: { label: 'Flexural Strength', icon: '/assets/img/icons/flexural-modulus.svg' },
         temp_deflection: { label: 'Temp Deflection', icon: '/assets/img/icons/temp.svg' },
-        hardness: { label: 'Hardness', icon: '/assets/img/icons/hard.svg' },
-        print_temp: { label: 'Printing Temp', icon: '/assets/img/icons/print_temp.svg' },
-        bed_temp: { label: 'Bed Temp', icon: '/assets/img/icons/bed_temp.svg' },
+        hardness: { label: 'Hardness', icon: '/assets/img/icons/hardness.svg' },
+        print_temp: { label: 'Printing Temp', icon: '/assets/img/icons/print-temp.svg' },
+        bed_temp: { label: 'Bed Temp', icon: '/assets/img/icons/bed-temp.svg' },
     };
 
     return Object.keys(specs).map(key => {

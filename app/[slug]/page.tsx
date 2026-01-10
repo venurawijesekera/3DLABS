@@ -116,10 +116,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     },
                     // Default sliders (can be dynamic later if needed)
                     sliders: [
-                        { img: '/assets/img/slider/1.webp', title: 'Concept Modeling', subtitle: 'Concept models are used to visualize ideas and concepts.' },
-                        { img: '/assets/img/slider/2.webp', title: 'Functional Prototyping', subtitle: 'Functional prototypes are used to test the functionality of a design.' },
-                        { img: '/assets/img/slider/3.webp', title: 'End-Use Parts', subtitle: 'End-use parts are used in the final product.' },
-                        { img: '/assets/img/slider/4.webp', title: 'Manufacturing Tooling', subtitle: 'Manufacturing tooling is used to aid in the manufacturing process.' }
+                        { img: '/assets/img/sliders/1.webp', title: 'Concept Modeling', subtitle: 'Concept models are used to visualize ideas and concepts.' },
+                        { img: '/assets/img/sliders/2.webp', title: 'Functional Prototyping', subtitle: 'Functional prototypes are used to test the functionality of a design.' },
+                        { img: '/assets/img/sliders/3.webp', title: 'End-Use Parts', subtitle: 'End-use parts are used in the final product.' },
+                        { img: '/assets/img/sliders/4.webp', title: 'Manufacturing Tooling', subtitle: 'Manufacturing tooling is used to aid in the manufacturing process.' }
                     ]
                 };
             }

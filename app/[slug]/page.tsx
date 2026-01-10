@@ -103,7 +103,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
                 materialData = {
                     title: m.long_name || m.name,
-                    subtitle: m.tag || 'Material',
+                    subtitle: m.name,
+                    tag: m.tag || 'Material',
                     description: m.description_2 || m.short_description,
                     image: m.main_image || m.image,
                     progress: mapProgress(properties || {}),

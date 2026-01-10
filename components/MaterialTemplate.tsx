@@ -24,7 +24,7 @@ export default function MaterialTemplate({ data }: { data: any }) {
                         <div className="col-xl-6 offset-xl-1">
                             <div className="cs_height_50 cs_height_lg_30"></div>
 
-                            <h2 className="cs_fs_38">Standard Material</h2>
+                            <h2 className="cs_fs_38">{data.tag}</h2>
                             <p>{data.description}</p>
 
                             <div className="cs_height_15 cs_height_lg_15"></div>

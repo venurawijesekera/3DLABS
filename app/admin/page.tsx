@@ -41,7 +41,7 @@ export default function AdminDashboard() {
         slug: '', name: '', long_name: '', image: '', main_image: '', tag: '',
         short_description: '', description_2: '',
         properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
-        specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
+        specifications: { density: '', tensile_strength: '', elongation_at_break: '', flexural_strength: '', heat_deflection_temperature: '', hardness: '', print_temperature: '', bed_temperature: '' },
         applications: { description: '', list: ['', '', '', '', '', ''], image: '' }
     });
 
@@ -184,7 +184,7 @@ export default function AdminDashboard() {
                     slug: '', name: '', long_name: '', image: '', main_image: '', tag: '',
                     short_description: '', description_2: '',
                     properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
-                    specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
+                    specifications: { density: '', tensile_strength: '', elongation_at_break: '', flexural_strength: '', heat_deflection_temperature: '', hardness: '', print_temperature: '', bed_temperature: '' },
                     applications: { description: '', list: ['', '', '', '', '', ''], image: '' }
                 });
                 fetchMaterials();
@@ -778,7 +778,7 @@ export default function AdminDashboard() {
                                     slug: '', name: '', long_name: '', image: '', main_image: '', tag: '',
                                     short_description: '', description_2: '',
                                     properties: { strength: 0, stiffness: 0, durability: 0, heat_resistance: 0, chemical_resistance: 0, surface_quality: 0 },
-                                    specifications: { density: '', tensile_strength: '', elongation: '', flexural_strength: '', temp_deflection: '', hardness: '', print_temp: '', bed_temp: '' },
+                                    specifications: { density: '', tensile_strength: '', elongation_at_break: '', flexural_strength: '', heat_deflection_temperature: '', hardness: '', print_temperature: '', bed_temperature: '' },
                                     applications: { description: '', list: ['', '', '', '', '', ''], image: '' }
                                 });
                                 setIsMaterialModalOpen(true);
@@ -1153,21 +1153,20 @@ export default function AdminDashboard() {
                                 <div style={{ gridColumn: 'span 2' }}>
                                     <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '20px' }}>Technical Specifications</h5>
                                 </div>
-                                {[
-                                    { label: 'Density', key: 'density' }, { label: 'Tensile Strength', key: 'tensile_strength' },
-                                    { label: 'Elongation at Break', key: 'elongation' }, { label: 'Flexural Strength', key: 'flexural_strength' },
-                                    { label: 'Heat Deflection Temp', key: 'temp_deflection' }, { label: 'Hardness', key: 'hardness' },
-                                    { label: 'Printing Temp', key: 'print_temp' }, { label: 'Bed Temp', key: 'bed_temp' }
+                                {label: 'Density', key: 'density' }, {label: 'Tensile Strength', key: 'tensile_strength' },
+                                {label: 'Elongation at Break', key: 'elongation_at_break' }, {label: 'Flexural Strength', key: 'flexural_strength' },
+                                {label: 'Heat Deflection Temp', key: 'heat_deflection_temperature' }, {label: 'Hardness', key: 'hardness' },
+                                {label: 'Printing Temp', key: 'print_temperature' }, {label: 'Bed Temp', key: 'bed_temperature' }
                                 ].map(spec => (
-                                    <div key={spec.key}>
-                                        <label style={labelStyle}>{spec.label}</label>
-                                        <input type="text" value={materialForm.specifications[spec.key] || ''}
-                                            onChange={e => setMaterialForm({
-                                                ...materialForm,
-                                                specifications: { ...materialForm.specifications, [spec.key]: e.target.value }
-                                            })}
-                                            style={{ ...inputStyle, width: '100%' }} />
-                                    </div>
+                                <div key={spec.key}>
+                                    <label style={labelStyle}>{spec.label}</label>
+                                    <input type="text" value={materialForm.specifications[spec.key] || ''}
+                                        onChange={e => setMaterialForm({
+                                            ...materialForm,
+                                            specifications: { ...materialForm.specifications, [spec.key]: e.target.value }
+                                        })}
+                                        style={{ ...inputStyle, width: '100%' }} />
+                                </div>
                                 ))}
 
                                 {/* Applications */}

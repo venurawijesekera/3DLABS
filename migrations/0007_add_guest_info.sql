@@ -1,2 +1,1 @@
-ALTER TABLE quotes ADD COLUMN guest_name TEXT;
-ALTER TABLE quotes ADD COLUMN guest_contact TEXT;
+-- Migration skipped because columns guest_name and guest_contact already exist in the database.

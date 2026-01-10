@@ -1,1 +1,1 @@
--- Duplicate migration 0007, skipped
+-- Migration skipped because columns guest_name and guest_contact already exist in the database.

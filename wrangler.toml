@@ -5,5 +5,5 @@ pages_build_output_dir = ".vercel/output/static"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "3dlabs-db"
-database_id = "668fcb77-1842-451a-a87e-00ef6ce0f94c"
+database_name = "3dlabs-clients"
+database_id = "83ef0c1e-ff50-4692-9361-064063243a0f"

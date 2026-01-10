@@ -58,10 +58,10 @@ export default function Material() {
                                                 <img src={item.image || '/assets/img/3logo.webp'} alt={item.name} />
                                             </Link>
                                             <div className="cs_categories">
-                                                <Link href={`/${item.slug}`} className="cs_category">{item.tag}</Link>
+                                                <Link href={`/${item.slug}`} className="cs_category">{item.name}</Link>
                                             </div>
                                         </div>
-                                        <h2 className="cs_post_title cs_fs_50"><Link href={`/${item.slug}`}>{item.name}</Link></h2>
+                                        <h2 className="cs_post_title cs_fs_50"><Link href={`/${item.slug}`}>{item.long_name || item.name}</Link></h2>
                                         <p className="cs_post_subtitle">{item.short_description || item.description}</p>
                                         <Link href={`/${item.slug}`} className="cs_post_btn">
                                             <span>Read More</span>

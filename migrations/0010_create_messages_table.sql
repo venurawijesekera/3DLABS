@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS messages (
     is_read BOOLEAN DEFAULT 0
 );
 
-CREATE INDEX idx_messages_client_id ON messages(client_id);
+CREATE INDEX IF NOT EXISTS idx_messages_client_id ON messages(client_id);

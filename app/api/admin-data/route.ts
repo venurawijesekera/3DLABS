@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getSessionAdmin } from '@/lib/adminAuth';
 
 export const runtime = 'edge';
 
@@ -8,16 +9,9 @@ export async function POST(request: NextRequest) {
     const db = (env as any).DB;
     const data = await request.json();
 
-    // 1. Admin Login
-    if (data.action === 'login') {
-        if (data.password === 'admin123') {
-            return NextResponse.json({ success: true, token: 'admin-access-token' });
-        }
-        return NextResponse.json({ success: false }, { status: 401 });
-    }
-
-    // 2. Verify Admin Token
-    if (data.token !== 'admin-access-token') {
+    // 1. Verify admin session (cookie set by /api/admin-auth)
+    const admin = await getSessionAdmin(request, db);
+    if (!admin) {
         return NextResponse.json("Unauthorized", { status: 401 });
     }
 

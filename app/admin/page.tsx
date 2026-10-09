@@ -4,10 +4,15 @@ export const runtime = 'edge';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AdminLogin from './AdminLogin';
 
 export default function AdminDashboard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [password, setPassword] = useState('');
+    const [checkingSession, setCheckingSession] = useState(true);
+    const [adminInfo, setAdminInfo] = useState<{ email: string; hasPassword: boolean; hasGoogle: boolean } | null>(null);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [passwordForm, setPasswordForm] = useState({ current: '', next: '' });
+    const [passwordMsg, setPasswordMsg] = useState('');
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'clients' | 'orders' | 'logs' | 'shop' | 'materials'>('orders');
 
@@ -45,12 +50,31 @@ export default function AdminDashboard() {
         applications: { description: '', list: ['', '', '', '', '', ''], image: '' }
     });
 
-    useEffect(() => {
-        const token = localStorage.getItem('3dlabs_admin_token');
-        if (token === 'admin-access-token') {
-            setIsLoggedIn(true);
-            loadInitialData();
+    const checkSession = async () => {
+        try {
+            const res = await fetch('/api/admin-auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'me' })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setAdminInfo(data.admin);
+                setIsLoggedIn(true);
+                loadInitialData();
+            } else {
+                setIsLoggedIn(false);
+            }
+        } catch {
+            setIsLoggedIn(false);
+        } finally {
+            setCheckingSession(false);
         }
+    };
+
+    useEffect(() => {
+        localStorage.removeItem('3dlabs_admin_token');
+        checkSession();
     }, []);
 
     const loadInitialData = () => {
@@ -63,33 +87,39 @@ export default function AdminDashboard() {
         fetchMaterials();
     };
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
+    const logout = async () => {
         try {
-            const res = await fetch('/api/admin-data', {
+            await fetch('/api/admin-auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'login', password })
+                body: JSON.stringify({ action: 'logout' })
+            });
+        } catch (err) { console.error(err); }
+        setIsLoggedIn(false);
+        setAdminInfo(null);
+    };
+
+    const changePassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setPasswordMsg('');
+        try {
+            const res = await fetch('/api/admin-auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'change_password', currentPassword: passwordForm.current, newPassword: passwordForm.next })
             });
             const data = await res.json();
             if (data.success) {
-                localStorage.setItem('3dlabs_admin_token', data.token);
-                setIsLoggedIn(true);
-                loadInitialData();
+                setIsPasswordModalOpen(false);
+                setPasswordForm({ current: '', next: '' });
+                setAdminInfo(info => info ? { ...info, hasPassword: true } : info);
+                alert('Password updated');
             } else {
-                alert('Invalid password');
+                setPasswordMsg(data.message || 'Could not update password');
             }
-        } catch (err) {
-            alert('Login failed');
-        } finally {
-            setLoading(false);
+        } catch {
+            setPasswordMsg('Connection error. Please try again.');
         }
-    };
-
-    const logout = () => {
-        localStorage.removeItem('3dlabs_admin_token');
-        setIsLoggedIn(false);
     };
 
     const fetchClients = async () => {
@@ -97,7 +127,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_clients', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_clients' })
             });
             const data = await res.json();
             setClients(data);
@@ -109,7 +139,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_quotes', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_quotes' })
             });
             const data = await res.json();
             setQuotes(data);
@@ -121,7 +151,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_logs', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_logs' })
             });
             const data = await res.json();
             setLogs(data);
@@ -133,7 +163,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_products', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_products' })
             });
             const data = await res.json();
             setProducts(data);
@@ -145,7 +175,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_materials', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_materials' })
             });
             const data = await res.json();
             setMaterials(data);
@@ -171,7 +201,6 @@ export default function AdminDashboard() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     action,
-                    token: 'admin-access-token',
                     material: editingMaterial ? { ...payloadData, id: editingMaterial.id } : payloadData
                 })
             });
@@ -202,7 +231,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'delete_material', token: 'admin-access-token', id })
+                body: JSON.stringify({ action: 'delete_material', id })
             });
             const data = await res.json();
             if (data.success) {
@@ -237,7 +266,6 @@ export default function AdminDashboard() {
             };
             const payload = JSON.stringify({
                 action,
-                token: 'admin-access-token',
                 product: editingProduct ? { ...productData, id: editingProduct.id } : productData
             });
 
@@ -286,7 +314,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'delete_product', token: 'admin-access-token', id })
+                body: JSON.stringify({ action: 'delete_product', id })
             });
             const data = await res.json();
             if (data.success) {
@@ -409,7 +437,6 @@ export default function AdminDashboard() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     action: 'update_status',
-                    token: 'admin-access-token',
                     id: quote.id,
                     order: quote.status_order,
                     payment: quote.status_payment,
@@ -440,7 +467,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_messages', token: 'admin-access-token', client_id: clientId })
+                body: JSON.stringify({ action: 'get_messages', client_id: clientId })
             });
             const data = await res.json();
             setMessages(data);
@@ -455,7 +482,6 @@ export default function AdminDashboard() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     action: 'send_message',
-                    token: 'admin-access-token',
                     client_id: selectedClientId,
                     sender: 'admin',
                     message: messageInput
@@ -469,42 +495,12 @@ export default function AdminDashboard() {
         } catch (err) { console.error(err); }
     };
 
+    if (checkingSession) {
+        return <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a' }} />;
+    }
+
     if (!isLoggedIn) {
-        return (
-            <div className="admin-login-container" style={{
-                height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backgroundColor: '#0a0a0a', backgroundImage: "url('/assets/img/bg.webp')", backgroundSize: 'cover'
-            }}>
-                <div style={{
-                    backgroundColor: 'rgba(23, 23, 23, 0.8)', padding: '40px', borderRadius: '15px',
-                    width: '100%', maxWidth: '400px', border: '1px solid rgba(255, 255, 255, 0.1)',
-                    backdropFilter: 'blur(10px)', textAlign: 'center'
-                }}>
-                    <h2 style={{ color: '#ffa415', marginBottom: '30px' }}>
-                        <i className="fa-solid fa-shield-halved" style={{ marginRight: '10px' }}></i>
-                        Admin Access
-                    </h2>
-                    <form onSubmit={handleLogin}>
-                        <input
-                            type="password"
-                            placeholder="Enter Admin Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            style={{
-                                width: '100%', padding: '12px', marginBottom: '20px', backgroundColor: '#111',
-                                border: '1px solid #333', color: '#fff', borderRadius: '8px'
-                            }}
-                        />
-                        <button type="submit" disabled={loading} style={{
-                            width: '100%', padding: '12px', backgroundColor: '#ffa415', color: '#000',
-                            border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer'
-                        }}>
-                            {loading ? 'Verifying...' : 'Login to Dashboard'}
-                        </button>
-                    </form>
-                </div>
-            </div>
-        );
+        return <AdminLogin onLogin={checkSession} />;
     }
 
     const filteredQuotes = quotes.filter(q =>
@@ -525,7 +521,12 @@ export default function AdminDashboard() {
                         3D Labs <span style={{ color: '#ffa415' }}>Admin Panel</span>
                     </h3>
                     <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                        {adminInfo && <span style={{ color: '#777', fontSize: '14px' }}>{adminInfo.email}</span>}
                         <Link href="/" style={{ color: '#aaa', textDecoration: 'none' }}>Visit Site</Link>
+                        <button onClick={() => { setPasswordMsg(''); setIsPasswordModalOpen(true); }} style={{
+                            backgroundColor: 'transparent', color: '#aaa', border: '1px solid #333',
+                            padding: '8px 20px', borderRadius: '8px', cursor: 'pointer'
+                        }}>{adminInfo?.hasPassword ? 'Change Password' : 'Set Password'}</button>
                         <button onClick={logout} style={{
                             backgroundColor: 'transparent', color: '#ff4d4d', border: '1px solid #ff4d4d',
                             padding: '8px 20px', borderRadius: '8px', cursor: 'pointer'
@@ -1153,7 +1154,7 @@ export default function AdminDashboard() {
                                 <div style={{ gridColumn: 'span 2' }}>
                                     <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '20px' }}>Technical Specifications</h5>
                                 </div>
-                                {label: 'Density', key: 'density' }, {label: 'Tensile Strength', key: 'tensile_strength' },
+                                {[{ label: 'Density', key: 'density' }, {label: 'Tensile Strength', key: 'tensile_strength' },
                                 {label: 'Elongation at Break', key: 'elongation_at_break' }, {label: 'Flexural Strength', key: 'flexural_strength' },
                                 {label: 'Heat Deflection Temp', key: 'heat_deflection_temperature' }, {label: 'Hardness', key: 'hardness' },
                                 {label: 'Printing Temp', key: 'print_temperature' }, {label: 'Bed Temp', key: 'bed_temperature' }
@@ -1221,6 +1222,36 @@ export default function AdminDashboard() {
                             </div>
                         </form>
                     </div>
+                </div>
+            )}
+
+            {/* Password Modal */}
+            {isPasswordModalOpen && (
+                <div style={modalOverlayStyle}>
+                    <form onSubmit={changePassword} style={{ ...modalContentStyle, height: 'auto' }}>
+                        <div style={modalHeaderStyle}>
+                            <h4 style={{ margin: 0, fontSize: '16px' }}>{adminInfo?.hasPassword ? 'Change Password' : 'Set Password'}</h4>
+                            <button type="button" onClick={() => setIsPasswordModalOpen(false)} style={closeBtnStyle}>&times;</button>
+                        </div>
+                        <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            {passwordMsg && <div style={{ color: '#ff4d4d', fontSize: '14px' }}>{passwordMsg}</div>}
+                            {adminInfo?.hasPassword && (
+                                <div>
+                                    <label style={labelStyle}>Current Password</label>
+                                    <input type="password" required autoComplete="current-password" value={passwordForm.current}
+                                        onChange={e => setPasswordForm({ ...passwordForm, current: e.target.value })}
+                                        style={{ ...inputStyle, width: '100%' }} />
+                                </div>
+                            )}
+                            <div>
+                                <label style={labelStyle}>New Password (min 10 characters)</label>
+                                <input type="password" required minLength={10} autoComplete="new-password" value={passwordForm.next}
+                                    onChange={e => setPasswordForm({ ...passwordForm, next: e.target.value })}
+                                    style={{ ...inputStyle, width: '100%' }} />
+                            </div>
+                            <button type="submit" style={actionBtnStyle}>Save Password</button>
+                        </div>
+                    </form>
                 </div>
             )}
 

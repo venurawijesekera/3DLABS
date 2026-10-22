@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { checkAdminPassword, isAdminToken, makeAdminToken } from '@/lib/admin-auth';
 
 export const runtime = 'edge';
 
@@ -10,15 +11,19 @@ export async function POST(request: NextRequest) {
 
     // 1. Admin Login
     if (data.action === 'login') {
-        if (data.password === 'admin123') {
-            return NextResponse.json({ success: true, token: 'admin-access-token' });
+        if (checkAdminPassword(env, data.password)) {
+            return NextResponse.json({ success: true, token: await makeAdminToken(db) });
         }
         return NextResponse.json({ success: false }, { status: 401 });
     }
 
     // 2. Verify Admin Token
-    if (data.token !== 'admin-access-token') {
+    if (!(await isAdminToken(db, data.token))) {
         return NextResponse.json("Unauthorized", { status: 401 });
+    }
+
+    if (data.action === 'verify') {
+        return NextResponse.json({ success: true });
     }
 
     // 3. Get All Clients

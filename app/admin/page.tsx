@@ -4,12 +4,15 @@ export const runtime = 'edge';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import LicensesTab from '@/components/admin/LicensesTab';
+
+const adminToken = () => localStorage.getItem('3dlabs_admin_token') ?? '';
 
 export default function AdminDashboard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<'clients' | 'orders' | 'logs' | 'shop' | 'materials'>('orders');
+    const [activeTab, setActiveTab] = useState<'clients' | 'orders' | 'logs' | 'shop' | 'materials' | 'licenses'>('orders');
 
     const [clients, setClients] = useState<any[]>([]);
     const [quotes, setQuotes] = useState<any[]>([]);
@@ -46,11 +49,20 @@ export default function AdminDashboard() {
     });
 
     useEffect(() => {
-        const token = localStorage.getItem('3dlabs_admin_token');
-        if (token === 'admin-access-token') {
-            setIsLoggedIn(true);
-            loadInitialData();
-        }
+        const token = adminToken();
+        if (!token) return;
+        fetch('/api/admin-data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'verify', token })
+        }).then((res) => {
+            if (res.ok) {
+                setIsLoggedIn(true);
+                loadInitialData();
+            } else {
+                localStorage.removeItem('3dlabs_admin_token');
+            }
+        }).catch(() => {});
     }, []);
 
     const loadInitialData = () => {
@@ -97,7 +109,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_clients', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_clients', token: adminToken() })
             });
             const data = await res.json();
             setClients(data);
@@ -109,7 +121,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_quotes', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_quotes', token: adminToken() })
             });
             const data = await res.json();
             setQuotes(data);
@@ -121,7 +133,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_logs', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_logs', token: adminToken() })
             });
             const data = await res.json();
             setLogs(data);
@@ -133,7 +145,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_products', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_products', token: adminToken() })
             });
             const data = await res.json();
             setProducts(data);
@@ -145,7 +157,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_materials', token: 'admin-access-token' })
+                body: JSON.stringify({ action: 'get_materials', token: adminToken() })
             });
             const data = await res.json();
             setMaterials(data);
@@ -171,7 +183,7 @@ export default function AdminDashboard() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     action,
-                    token: 'admin-access-token',
+                    token: adminToken(),
                     material: editingMaterial ? { ...payloadData, id: editingMaterial.id } : payloadData
                 })
             });
@@ -202,7 +214,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'delete_material', token: 'admin-access-token', id })
+                body: JSON.stringify({ action: 'delete_material', token: adminToken(), id })
             });
             const data = await res.json();
             if (data.success) {
@@ -237,7 +249,7 @@ export default function AdminDashboard() {
             };
             const payload = JSON.stringify({
                 action,
-                token: 'admin-access-token',
+                token: adminToken(),
                 product: editingProduct ? { ...productData, id: editingProduct.id } : productData
             });
 
@@ -286,7 +298,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'delete_product', token: 'admin-access-token', id })
+                body: JSON.stringify({ action: 'delete_product', token: adminToken(), id })
             });
             const data = await res.json();
             if (data.success) {
@@ -409,7 +421,7 @@ export default function AdminDashboard() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     action: 'update_status',
-                    token: 'admin-access-token',
+                    token: adminToken(),
                     id: quote.id,
                     order: quote.status_order,
                     payment: quote.status_payment,
@@ -440,7 +452,7 @@ export default function AdminDashboard() {
             const res = await fetch('/api/admin-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'get_messages', token: 'admin-access-token', client_id: clientId })
+                body: JSON.stringify({ action: 'get_messages', token: adminToken(), client_id: clientId })
             });
             const data = await res.json();
             setMessages(data);
@@ -455,7 +467,7 @@ export default function AdminDashboard() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     action: 'send_message',
-                    token: 'admin-access-token',
+                    token: adminToken(),
                     client_id: selectedClientId,
                     sender: 'admin',
                     message: messageInput
@@ -569,6 +581,13 @@ export default function AdminDashboard() {
                         style={{ ...tabStyle, ...(activeTab === 'materials' ? activeTabStyle : {}) }}
                     >
                         <i className="fa-solid fa-layer-group" style={{ marginRight: '8px' }}></i> Materials
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('licenses')}
+                        className={activeTab === 'licenses' ? 'active-tab' : 'tab'}
+                        style={activeTab === 'licenses' ? activeTabStyle : tabStyle}
+                    >
+                        <i className="fa-solid fa-key" style={{ marginRight: '8px' }}></i> BeamEngine Licences
                     </button>
                 </div>
 
@@ -767,6 +786,8 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                 )}
+
+                {activeTab === 'licenses' && <LicensesTab token={adminToken()} onSignedOut={logout} />}
 
                 {activeTab === 'materials' && (
                     <div className="cs_card" style={cardStyle}>
@@ -1153,7 +1174,7 @@ export default function AdminDashboard() {
                                 <div style={{ gridColumn: 'span 2' }}>
                                     <h5 style={{ color: '#ffa415', borderBottom: '1px solid #333', paddingBottom: '10px', marginBottom: '15px', marginTop: '20px' }}>Technical Specifications</h5>
                                 </div>
-                                {label: 'Density', key: 'density' }, {label: 'Tensile Strength', key: 'tensile_strength' },
+                                {[{ label: 'Density', key: 'density' }, {label: 'Tensile Strength', key: 'tensile_strength' },
                                 {label: 'Elongation at Break', key: 'elongation_at_break' }, {label: 'Flexural Strength', key: 'flexural_strength' },
                                 {label: 'Heat Deflection Temp', key: 'heat_deflection_temperature' }, {label: 'Hardness', key: 'hardness' },
                                 {label: 'Printing Temp', key: 'print_temperature' }, {label: 'Bed Temp', key: 'bed_temperature' }
